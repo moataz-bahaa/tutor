@@ -1,0 +1,35 @@
+.dropdown {
+  width: 100%;
+  position: relative;
+  margin-bottom: 50px;
+  .title {
+    background-color: $main-blue;
+    color: $white;
+    font-size: 20px;
+    padding: 10px 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    &:hover {
+      background-color: $crimson;
+    }
+  }
+  .items {
+    position: absolute;
+    z-index: 9;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: $gray-700;
+    color: $white;
+    overflow-y: scroll;
+    .item {
+      padding: 10px 20px;
+      cursor: pointer;
+      &:hover {
+        background-color: $dark;
+      }
+    }
+  }
+}

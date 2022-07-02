@@ -1,0 +1,87 @@
+// base layout classes
+.container {
+  padding: 0 5px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  @include xs {
+    padding: 0 5px;
+  }
+  @include sm {
+    width: 540px;
+  }
+  @include md {
+    width: 720px;
+  }
+  @include lg {
+    width: 960px;
+  }
+  @include xl {
+    width: 1140px;
+  }
+  @include xxl {
+    width: 1320px;
+  }
+}
+
+.row {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+
+  @include md {
+    &.g-1 {
+      column-gap: 16 * 1px;
+    }
+    &.g-2 {
+      column-gap: 16 * 2px;
+    }
+    &.g-3 {
+      column-gap: 16 * 3px;
+    }
+    &.g-4 {
+      column-gap: 16 * 4px;
+    }
+    &.g-5 {
+      column-gap: 16 * 5px;
+    }
+  }
+}
+
+@for $i from 1 through $grid-columns {
+  .col-#{$i} {
+    grid-column: span #{$i};
+  }
+}
+
+@include sm {
+  @for $i from 1 through $grid-columns {
+    .col-sm-#{$i} {
+      grid-column: span #{$i};
+    }
+  }
+}
+
+@include md {
+  @for $i from 1 through $grid-columns {
+    .col-md-#{$i} {
+      grid-column: span #{$i};
+    }
+  }
+}
+
+@include lg {
+  @for $i from 1 through $grid-columns {
+    .col-lg-#{$i} {
+      grid-column: span #{$i};
+    }
+  }
+}
+
+@include xl {
+  @for $i from 1 through $grid-columns {
+    .col-xl-#{$i} {
+      grid-column: span #{$i};
+    }
+  }
+}

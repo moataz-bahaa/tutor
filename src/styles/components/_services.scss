@@ -1,0 +1,35 @@
+.services {
+  .title {
+    text-align: center;
+    font-weight: bolder;
+    font-size: 40px;
+    color: $dark;
+    position: relative;
+    margin-bottom: 60px;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 150px;
+      display: block;
+      height: 4px;
+      background-color: $crimson;
+    }
+  }
+  .card {
+    width: 100%;
+    padding: 30px 0;
+    margin-bottom: 30px;
+    color: $white;
+    text-align: center;
+    border-radius: 12px;
+    cursor: pointer;
+    .icon {
+      font-size: 140px;
+      margin-bottom: 10px;
+    }
+  }
+}

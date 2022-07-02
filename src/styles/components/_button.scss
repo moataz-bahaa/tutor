@@ -1,0 +1,56 @@
+.btn {
+  display: inline-block;
+  border: 1px solid transparent;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 16px;
+  padding: 8px 16px;
+  vertical-align: middle;
+  white-space: nowrap;
+  cursor: pointer;
+  line-height: 1;
+  margin: 0.25rem 0;
+  transition: all 0.2s ease;
+
+  &.btn-lg {
+    font-size: 22px;
+    padding: 10px 20px;
+  }
+  &.btn-xl {
+    font-size: 26px;
+    padding: 15px 30px;
+  }
+  @each $size in $screenSizes {
+    @include screen-size($size) {
+      &.btn-lg-#{$size} {
+        font-size: 22px;
+        padding: 10px 20px;
+      }
+      &.btn-xl-#{$size} {
+        font-size: 26px;
+        padding: 15px 30px;
+      }
+    }
+  }
+}
+
+@mixin button($bgColor, $bgOnHover, $textColor, $borderRadius) {
+  background-color: $bgColor;
+  color: $textColor;
+  border-radius: $borderRadius;
+  &:hover {
+    background-color: $bgOnHover;
+  }
+}
+
+.btn-danger {
+  @include button($crimson, darken($crimson, 15%), $white, 7px);
+}
+
+.btn-blue {
+  @include button($main-blue, darken($main-blue, 10%), $white, 7px)
+}
+
+.btn-green {
+  @include button($green, darken($green, 10%), $white, 7px);
+}

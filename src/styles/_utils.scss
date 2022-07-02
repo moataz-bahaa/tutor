@@ -1,0 +1,153 @@
+// padding and margins
+@for $i from 0 through 10 {
+  // padding
+  .p-#{$i} {
+    padding: 16px * $i !important;
+  }
+  .py-#{$i} {
+    padding-top: 16px * $i !important;
+    padding-bottom: 16px * $i !important;
+  }
+  .px-#{$i} {
+    padding-left: 16px * $i !important;
+    padding-right: 16px * $i !important;
+  }
+  .pt-#{$i} {
+    padding-top: 16px * $i !important;
+  }
+  .pb-#{$i} {
+    padding-bottom: 16px * $i !important;
+  }
+  .pl-#{$i} {
+    padding-left: 16px * $i !important;
+  }
+  .pr-#{$i} {
+    padding-right: 16px * $i !important;
+  }
+
+  // margins
+  .m-#{$i} {
+    margin: 16px * $i !important;
+  }
+  .my-#{$i} {
+    margin-top: 16px * $i !important;
+    margin-bottom: 16px * $i !important;
+  }
+  .mx-#{$i} {
+    margin-left: 16px * $i !important;
+    margin-right: 16px * $i !important;
+  }
+  .mt-#{$i} {
+    margin-top: 16px * $i !important;
+  }
+  .mb-#{$i} {
+    margin-bottom: 16px * $i !important;
+  }
+  .ml-#{$i} {
+    margin-left: 16px * $i !important;
+  }
+  .mr-#{$i} {
+    margin-right: 16px * $i !important;
+  }
+}
+
+// paddings and margins on sm
+
+@each $size in $screenSizes {
+  @include screen-size($size) {
+    @for $i from 0 through 10 {
+      // padding
+      .p-#{$size}-#{$i} {
+        padding: 16px * $i !important;
+      }
+      .py-#{$size}-#{$i} {
+        padding-top: 16px * $i !important;
+        padding-bottom: 16px * $i !important;
+      }
+      .px-#{$size}-#{$i} {
+        padding-left: 16px * $i !important;
+        padding-right: 16px * $i !important;
+      }
+      .pt-#{$size}-#{$i} {
+        padding-top: 16px * $i !important;
+      }
+      .pb-#{$size}-#{$i} {
+        padding-bottom: 16px * $i !important;
+      }
+      .pl-#{$size}-#{$i} {
+        padding-left: 16px * $i !important;
+      }
+      .pr-#{$size}-#{$i} {
+        padding-right: 16px * $i !important;
+      }
+  
+      // margins
+      .m-#{$size}-#{$i} {
+        margin: 16px * $i !important;
+      }
+      .my-#{$size}-#{$i} {
+        margin-top: 16px * $i !important;
+        margin-bottom: 16px * $i !important;
+      }
+      .mx-#{$size}-#{$i} {
+        margin-left: 16px * $i !important;
+        margin-right: 16px * $i !important;
+      }
+      .mt-#{$size}-#{$i} {
+        margin-top: 16px * $i !important;
+      }
+      .mb-#{$size}-#{$i} {
+        margin-bottom: 16px * $i !important;
+      }
+      .ml-#{$size}-#{$i} {
+        margin-left: 16px * $i !important;
+      }
+      .mr-#{$size}-#{$i} {
+        margin-right: 16px * $i !important;
+      }
+    }
+  }
+}
+
+.w-100 {
+  width: 700px;
+  height: 500px;
+}
+.d-flex {
+  display: flex;
+}
+.flex-end {
+  justify-content: flex-end;
+}
+.flex-start {
+  justify-content: flex-start;
+}
+.js-center {
+  justify-content: center;
+}
+.js-space-between {
+  justify-content: space-between;
+}
+.al-items-center {
+  align-items: center;
+}
+
+.bg-green {
+  background-color: #10C45C;
+}
+
+.bg-crimson {
+  background-color: $crimson;
+}
+
+.bg-yellow {
+  background-color: #EAB830;
+}
+
+.bg-primary {
+  background-color: #307AD5;
+}
+
+.bg-pink {
+  background-color: #D94DA6;
+}

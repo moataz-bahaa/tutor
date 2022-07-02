@@ -1,0 +1,67 @@
+:root {
+  --gutter-x: 16px;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  overflow-x: hidden;
+  direction: rtl;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+// scroll bar
+body::-webkit-scrollbar {
+  width: 10px;
+}
+
+body::-webkit-scrollbar-track {
+  background: $gray-400;
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: $main-blue;
+  border-radius: 20px;
+  border: 2px solid $gray-400;
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 5px 8px;
+  color: $dark;
+  border-radius: 5px;
+  transition: all 0.15s ease-in-out;
+  background-color: $white;
+  border: 1px solid #ced4da;
+  outline: none;
+  &:focus {
+    box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.25);
+  }
+  &:focus::placeholder {
+    color: transparent;
+  }
+}
+
+.list-items {
+  li {
+    font-size: 20px;
+    padding: 0.75rem 1.25rem;
+    margin-bottom: -1px;
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+  }
+}

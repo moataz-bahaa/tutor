@@ -1,0 +1,21 @@
+@keyframes up-down {
+  from {
+    transform: translateY(-20px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-right {
+  from {
+    // transform: translateX(-100%);
+    max-height: 0;
+    opacity: 0;
+  }
+  to {
+    // transform: translateX(0);
+    max-height: 300px;
+    opacity: 1;
+  }
+}

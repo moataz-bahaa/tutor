@@ -1,0 +1,25 @@
+.dashboard {
+  overflow-x: auto;
+  overflow-y: hidden;
+  width: 100%;
+  font-size: 20px;
+  .select {
+    .select-item, .select-header {
+      background-color: $main-blue;
+      width: 100%;
+      padding: 15px;
+      color: $dark;
+      font-size: 20px;
+      cursor: pointer;
+      color: $white;
+      transition: color 0.2s ease, background-color 0.2s ease;
+      &:hover {
+        background-color: $crimson;
+      }
+      &:not(:last-child) {
+        border-bottom: 3px solid rgba(255, 255, 255, 0.03);
+      }
+    }
+  }
+  
+}

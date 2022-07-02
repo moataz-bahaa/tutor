@@ -1,0 +1,15 @@
+.student-profile {
+  .img-container {
+    border-left: 4px solid #eee;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    img {
+      width: 100%;
+      border-radius: 50%;
+    }
+  }
+
+}

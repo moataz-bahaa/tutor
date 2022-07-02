@@ -1,0 +1,33 @@
+// variables
+@import './variables';
+
+@import './mixins';
+@import './animations';
+@import './grid';
+@import './utils';
+
+// base
+@import './base';
+
+// components
+@import './components/alert';
+@import './components/button';
+@import './components/modal';
+@import './components/navbar';
+@import './components/studentsDashboard';
+@import './components/videosDashboard';
+@import './components/examsDashboard';
+@import './components/addQuestion';
+@import './components/notFoundPage';
+@import './components/services';
+@import './components/dropdown';
+@import './components/pagination';
+
+// pages
+@import './pages/dashboard';
+@import './pages/home';
+@import './pages/login';
+@import './pages/studentProfile.scss';
+@import './pages/addExam';
+
+@import './components/toggleSwitch';

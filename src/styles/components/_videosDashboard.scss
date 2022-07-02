@@ -1,0 +1,31 @@
+
+.videos-dashboard {
+  .drag-drop {
+    padding: 40px 20px;
+    border: 2px dashed $main-blue;
+    background-color: $gray-200;
+    cursor: pointer;
+  }
+  
+  .video {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 2px dashed $main-blue;
+    margin-bottom: 10px;
+
+    &-icon {
+      font-size: 50px;
+    }
+
+    .delete-icon {
+      font-size: 50px;
+      cursor: pointer;
+      
+      &:hover {
+        color: $crimson;
+      }
+    }
+  }
+}
