@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import Dropdown from '../components/Dropdown';
 import ExamsDashboard from '../components/exams/ExamsDashboard';
-import StudentsDashboard from '../components/StudentsDashboard';
-import VideosDashboard from '../components/VideoDashboard';
+import StudentsDashboard from '../components/students/StudentsDashboard';
+import VideosDashboard from '../components/videos/VideosDashboard';
 
 interface DashboardProps {}
 

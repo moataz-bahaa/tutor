@@ -1,4 +1,4 @@
-import Alert from './Alert';
+import Alert from '../Alert';
 import { useReactMediaRecorder } from 'react-media-recorder';
 import { useEffect, useRef } from 'react';
 

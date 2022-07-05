@@ -1,28 +1,37 @@
 interface ComponentProps {
   activePage: number;
-  numberOfPages?: number;
-  setActivePage: React.Dispatch<React.SetStateAction<number>>;
+  numberOfPages: number;
+  setPage: (value: number) => void;
 }
 
-const Component: React.FC<ComponentProps> = ({ activePage, numberOfPages = 6, setActivePage }) => {
+const Component: React.FC<ComponentProps> = ({ activePage, numberOfPages, setPage }) => {
   return (
-    <div className='pagination mt-5' lang='ar'>
-      <div className='pagination-item'>&laquo;</div>
-      {Array(Math.min(numberOfPages, 5))
+    <div className='pagination mt-5'>
+      <div
+        className={`pagination-item ${activePage === 1 ? 'disabled' : ''}`}
+        onClick={() => setPage(activePage - 1)}
+      >
+        &laquo;
+      </div>
+      {Array(numberOfPages)
         .fill(null)
         .map((el, index) => {
           return (
             <div
               key={index}
               className={`pagination-item ${activePage === index + 1 ? 'active' : ''}`}
-              onClick={() => setActivePage(index + 1)}
+              onClick={() => setPage(index + 1)}
             >
               {index + 1}
             </div>
           );
         })}
-      {/* {numberOfPages > 5 && <div className='pagination-item'>...</div>} */}
-      <div className='pagination-item'>&raquo;</div>
+      <div
+        className={`pagination-item ${activePage === numberOfPages ? 'disabled' : ''}`}
+        onClick={() => setPage(activePage + 1)}
+      >
+        &raquo;
+      </div>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import Modal from './Modal';
+import Modal from '../Modal';
 import React, { useState } from 'react';
 
 interface AddQuestionProps {}

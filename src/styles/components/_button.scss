@@ -54,3 +54,7 @@
 .btn-green {
   @include button($green, darken($green, 10%), $white, 7px);
 }
+
+a.btn {
+  text-align: center;
+}

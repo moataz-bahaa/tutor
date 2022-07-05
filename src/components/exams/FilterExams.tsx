@@ -13,12 +13,12 @@ const FilterExams: React.FC<FilterExamsProps> = (props) => {
       alert('اختر صف من 1 ل 3');
       return;
     }
-    dispatch(getExamsByLevel(level));
+    dispatch(getExamsByLevel({ level }));
   };
   return (
     <div className='filter-exams'>
       <select className='form-control' onChange={handleChangeLevel}>
-        <option value='0' defaultChecked>
+        <option hidden>
           اختر الصف
         </option>
         <option value='1'>الصف الاول</option>

@@ -1,36 +1,67 @@
 import { motion } from 'framer-motion';
 import { MdDelete } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
-import { getAllStudents, deleteStudent, authStudent } from '../features/students-slice';
-import { useAppDispatch, useAppSelector } from '../app/hooks';
+import {
+  getAllStudents,
+  deleteStudent,
+  authStudent,
+  getStudentsByLevel,
+  getStudentsByName,
+} from '../../features/students-slice';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useEffect, useState } from 'react';
-import Spinner from './Spinner';
-import Pagination from './Pagination';
+import Spinner from '../Spinner';
+import Pagination from '../Pagination';
 import FilterStudents from './FilterStudents';
-import Alert from './Alert';
+import Alert from '../Alert';
 
 interface StudentsDashboardProps {}
 
 const StudentsDashboard: React.FC<StudentsDashboardProps> = (props) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [activePage, setActivePage] = useState(1);
+  const [current, setCurrent] = useState<{
+    type: 'all' | 'level' | 'search';
+    activePage: number;
+    value?: string | number;
+  }>({ type: 'all', activePage: 1 });
 
   useEffect(() => {
-    dispatch(getAllStudents({ pageNumber: activePage }));
-  }, []);
+    if (current.type === 'all') {
+      dispatch(getAllStudents({ pageNumber: current.activePage }));
+    } else if (current.type === 'level') {
+      dispatch(getStudentsByLevel({ pageNumber: current.activePage }));
+    } else if (current.type === 'search') {
+      dispatch(
+        getStudentsByName({
+          name: current.value as string,
+          pageNumber: current.activePage,
+        })
+      );
+    }
+  }, [current]);
 
-  const { students, loading, error } = useAppSelector((state) => {
+  const { students, loading, error, numberOfPages } = useAppSelector((state) => {
     return {
-      students: state.students.data,
+      students: state.students.data.students,
       loading: state.students.loading,
       error: state.students.error,
+      numberOfPages: state.students.data.pageCount,
     };
   });
 
+  const setPage = (value: number) => {
+    return setCurrent((prevState) => {
+      return {
+        ...prevState,
+        activePage: value,
+      };
+    });
+  };
+
   return (
     <>
-      <FilterStudents />
+      <FilterStudents setCurrent={setCurrent} />
       {error ? (
         <Alert message={error} variant='danger' />
       ) : loading ? (
@@ -108,13 +139,11 @@ const StudentsDashboard: React.FC<StudentsDashboardProps> = (props) => {
           </tbody>
         </table>
       )}
-      {students.length > 8 && (
-        <Pagination
-          activePage={activePage}
-          numberOfPages={10}
-          setActivePage={setActivePage}
-        />
-      )}
+      <Pagination
+        activePage={current.activePage}
+        numberOfPages={numberOfPages}
+        setPage={setPage}
+      />
     </>
   );
 };

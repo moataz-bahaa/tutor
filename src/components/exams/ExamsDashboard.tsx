@@ -12,7 +12,7 @@ const ExamsDashboard: React.FC<ExamsDashboardProps> = (props) => {
     return {
       loading: state.exams.loading,
       error: state.exams.error,
-      exams: state.exams.data,
+      exams: state.exams.data.exams,
     };
   });
   const navigate = useNavigate();

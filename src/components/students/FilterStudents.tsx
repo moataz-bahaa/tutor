@@ -1,35 +1,51 @@
 import React, { useState } from 'react';
-import { useAppDispatch } from '../app/hooks';
-import { getStudentsByLevel, getStudentsByName } from '../features/students-slice';
 
-interface ComponentProps {}
+interface ComponentProps {
+  setCurrent: React.Dispatch<
+    React.SetStateAction<{
+      type: 'all' | 'level' | 'search';
+      activePage: number;
+      value?: string | number | undefined;
+    }>
+  >;
+}
 
-const Component: React.FC<ComponentProps> = ({}) => {
+const Component: React.FC<ComponentProps> = ({ setCurrent }) => {
   const [name, setName] = useState('');
-  const dispatch = useAppDispatch();
 
   const handleChangeLevel = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const level = +e.target.value;
-    if (level === 0) {
-      alert('اختر صف من 1 ل 3');
-      return;
+    const level = e.target.value;
+    if (level === 'all') {
+      setCurrent({
+        type: 'all',
+        activePage: 1,
+      });
+    } else {
+      setCurrent({
+        type: 'level',
+        activePage: 1,
+        value: +level,
+      });
     }
-    dispatch(getStudentsByLevel(level));
   };
 
   const searchByName = () => {
     if (name === '') {
       alert('اكتب اسم');
     }
-    dispatch(getStudentsByName(name));
+    setCurrent({
+      type: 'search',
+      activePage: 1,
+      value: name,
+    });
   };
 
   return (
     <div className='row g-2 filter-students mb-3'>
       <div className='col-12 col-md-6'>
         <select className='form-control' onChange={handleChangeLevel}>
-          <option value='0' defaultChecked>
-            اختر الصف
+          <option value='all' defaultChecked>
+            كل الطلاب
           </option>
           <option value='1'>الصف الاول</option>
           <option value='2'>الصف الثانى</option>

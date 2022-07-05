@@ -6,8 +6,8 @@
   background-color: rgba($dark, 0.89);
   z-index: 9999;
   width: 100%;
-  overflow-y: auto;
   margin-bottom: 20px;
+  overflow-y: auto;
 
   &-content {
     position: absolute;
@@ -16,6 +16,7 @@
     font-size: 20px;
     padding: 20px;
     width: 90%;
+
     @include sm {
       width: 540px;
     }

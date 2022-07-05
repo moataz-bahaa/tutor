@@ -151,3 +151,21 @@
 .bg-pink {
   background-color: #D94DA6;
 }
+
+.text {
+  &-blue {
+    color: $main-blue;
+  }
+
+  &-center {
+    text-align: center;
+  }
+  
+  &-underline {
+    text-decoration: underline;
+  }
+
+  &-bold {
+    font-weight: bold;
+  }
+}

@@ -19,15 +19,13 @@ const Home: React.FC<HomeProps> = (props) => {
                   viewport={{ once: true }}
                 >
                   <div className='line'>SOME TEXT</div>
-                  <div className='text'>
-                    Online Coaching Lessons Remote Learning
-                  </div>
+                  <div className='text'>Online Coaching Lessons Remote Learning</div>
                 </motion.div>
               </div>
               <div className='avatar col-12 col-lg-6'>
                 <motion.img
                   src='images/hero-img.png'
-                  alt='teacher avatar'
+                  alt='avatar'
                   transition={{ duration: 0.3, type: 'spring' }}
                   initial={{ opacity: 0, x: '-100%' }}
                   whileInView={{ opacity: 1, x: 0 }}

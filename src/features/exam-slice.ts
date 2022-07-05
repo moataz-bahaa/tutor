@@ -4,7 +4,9 @@ import { fetchExamsByLevel, fetchExamById } from '../app/api';
 export const getExamsByLevel = createAsyncThunk('exams/level', fetchExamsByLevel);
 export const getExamById = createAsyncThunk('exam/id', fetchExamById);
 
-export interface Exam {
+
+
+export interface ExamInfo {
   examId: number;
   examName: string;
   examNumber: string;
@@ -20,18 +22,55 @@ export interface ExamDetails {
   examTimeLine: string;
 }
 
+export interface Answer {
+  AnswerID: number;
+  AnswerNumber: string;
+  AnswerText: string;
+  CorrectAnswer: [
+    {
+      CorrectAnswerNumber: string;
+    }
+  ];
+}
+
+export interface Question {
+  QuestionID: number;
+  QuestionNumber: string;
+  QuestionText: string;
+  ExamAnswers: [Answer, Answer, Answer, Answer];
+}
+
+export interface ExamWithQuestions {
+  ExamID: number;
+  ExamName: string;
+  ExamQuestions: Question[];
+}
 
 interface InitialState {
   loading: boolean;
-  data: Exam[];
-  curExam: ExamDetails | null;
+  data: {
+    exams: ExamInfo[];
+    examsCount: number;
+    pageCount: number;
+  };
+  curExam: {
+    details: ExamDetails | null;
+    questions: Question[] | null;
+  };
   error: string;
 }
 
 const initialState: InitialState = {
   loading: false,
-  data: [],
-  curExam: null,
+  data: {
+    exams: [],
+    examsCount: 0,
+    pageCount: 0,
+  },
+  curExam: {
+    details: null,
+    questions: null,
+  },
   error: '',
 };
 
@@ -48,12 +87,12 @@ const exmasSlice = createSlice({
       .addCase(getExamsByLevel.fulfilled, (state, action) => {
         state.loading = false;
         state.error = '';
-        state.data = action.payload.data;
+        state.data = action.payload;
       })
       .addCase(getExamsByLevel.rejected, (state, action) => {
         state.loading = false;
-        state.data = [];
-        state.error = action.error.message || 'خطا ف السيرقير';
+        state.data = initialState.data;
+        state.error = <string>action.payload || 'خطا ف السيرقير';
       });
 
     // get exam by id
@@ -64,12 +103,12 @@ const exmasSlice = createSlice({
       .addCase(getExamById.fulfilled, (state, action) => {
         state.loading = false;
         state.error = '';
-        state.curExam = action.payload.data;
+        state.curExam = action.payload;
       })
       .addCase(getExamById.rejected, (state, action) => {
         state.loading = false;
-        state.curExam = null;
-        state.error = action.error.message || 'خطا ف السيرقير';
+        state.curExam = initialState.curExam;
+        state.error = <string>action.payload || 'خطا ف السيرقير';
       });
   },
 });

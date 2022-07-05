@@ -35,14 +35,22 @@ export interface Student {
 
 interface InitialState {
   loading: boolean;
-  data: Student[];
+  data: {
+    students: Student[];
+    studentCount: number;
+    pageCount: number;
+  };
   currentStudent: Student | null;
   error: string;
 }
 
 const initialState: InitialState = {
   loading: false,
-  data: [],
+  data: {
+    students: [],
+    studentCount: 0,
+    pageCount: 0,
+  },
   currentStudent: null,
   error: '',
 };
@@ -64,8 +72,8 @@ const studentSlice = createSlice({
       })
       .addCase(getAllStudents.rejected, (state, action) => {
         state.loading = false;
-        state.data = [];
-        state.error = action.error.message || 'خطا ف السرقير';
+        state.data = initialState.data;
+        state.error = <string>action.payload || 'خطا ف السرقير';
       });
 
     // get studetn by id
@@ -80,7 +88,7 @@ const studentSlice = createSlice({
       })
       .addCase(getStudentById.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || 'خطا ف السرقير';
+        state.error = <string>action.payload || 'خطا ف السرقير';
       });
 
     // get students by level
@@ -95,7 +103,7 @@ const studentSlice = createSlice({
       })
       .addCase(getStudentsByLevel.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || 'خطا ف السرقير';
+        state.error = <string>action.payload || 'خطا ف السرقير';
       });
 
     // get students by name
@@ -110,41 +118,41 @@ const studentSlice = createSlice({
       })
       .addCase(getStudentsByName.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || 'خطا ف السرقير';
+        state.error = <string>action.payload || 'خطا ف السرقير';
       });
 
     // delete student
-    builder
-      .addCase(deleteStudent.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(deleteStudent.fulfilled, (state, action) => {
-        state.loading = false;
-        state.error = '';
-        const student = state.data.find((s) => s.studentId === action.payload.id);
-        const index = state.data.indexOf(student!);
-        state.data.splice(index, 1);
-      })
-      .addCase(deleteStudent.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message || 'خطا ف السرقير';
-      });
+    // builder
+    //   .addCase(deleteStudent.pending, (state) => {
+    //     state.loading = true;
+    //   })
+    //   .addCase(deleteStudent.fulfilled, (state, action) => {
+    //     state.loading = false;
+    //     state.error = '';
+    //     const student = state.data.find((s) => s.studentId === action.payload.id);
+    //     const index = state.data.indexOf(student!);
+    //     state.data.splice(index, 1);
+    //   })
+    //   .addCase(deleteStudent.rejected, (state, action) => {
+    //     state.loading = false;
+    //     state.error = <string>action.payload || 'خطا ف السرقير';
+    //   });
 
     // auth student
-    builder
-      .addCase(authStudent.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(authStudent.fulfilled, (state, action) => {
-        state.loading = false;
-        state.error = '';
-        const index = state.data.indexOf(action.payload.student);
-        state.data[index].authValue = !state.data[index].authValue;
-      })
-      .addCase(authStudent.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message || 'خطا ف السرقير';
-      });
+    // builder
+    //   .addCase(authStudent.pending, (state) => {
+    //     state.loading = true;
+    //   })
+    //   .addCase(authStudent.fulfilled, (state, action) => {
+    //     state.loading = false;
+    //     state.error = '';
+    //     const index = state.data.indexOf(action.payload.student);
+    //     state.data[index].authValue = !state.data[index].authValue;
+    //   })
+    //   .addCase(authStudent.rejected, (state, action) => {
+    //     state.loading = false;
+    //     state.error = <string>action.payload || 'خطا ف السرقير';
+    //   });
   },
 });
 
