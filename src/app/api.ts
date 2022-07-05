@@ -206,7 +206,7 @@ export const fetchVideoByWeek = async (
 ) => {
   try {
     const res = await axios.get<{
-      item1: { videoCount: number; pageCount: number; };
+      item1: { videoCount: number; pageCount: number };
       item2: Video[];
     }>(`/Videos/Select/Video/BY/Week/${pageNumber}/${count}/${level}/${month}/${week}`);
 
@@ -228,15 +228,16 @@ export const deleteVideoById = async (id: number, { rejectWithValue }: any) => {
     return rejectWithValue(error.response.data);
   }
 };
-// export const fetchVideoById = async (id: number, { rejectWithValue }: any) => {
-//   try {
-//     const res = await axios.get(`/Videos/Select/Video/BY/ID/${id}`);
-//     return {};
-//   }
-//   catch (error: any) {
-//     rejectWithValue(error.response.data);
-//   }
-// };
+
+export const fetchVideoById = async (id: number, { rejectWithValue }: any) => {
+  try {
+    const res = await axios.get(`/Videos/Select/Video/BY/ID/${id}`);
+    return {};
+  } catch (error: any) {
+    rejectWithValue(error.response.data);
+  }
+};
+
 //#endregion
 
 //#region Exams
@@ -253,6 +254,30 @@ export const fetchExamsByLevel = async (
       item1: { examsCount: number; pageCount: number };
       item2: ExamInfo[];
     }>(`/Exam/Select/Exam/BY/Level/${pageNumber}/${count}/${level}`);
+    return {
+      exams: res.data.item2,
+      examsCount: res.data.item1.examsCount,
+      pageCount: res.data.item1.pageCount,
+    };
+  } catch (error: any) {
+    return rejectWithValue(error.response.data);
+  }
+};
+
+export const fetchExamsByMonth = async (
+  {
+    level,
+    month,
+    pageNumber = 1,
+    count = 3,
+  }: { level: number; month: number; pageNumber?: number; count?: number },
+  { rejectWithValue }: any
+) => {
+  try {
+    const res = await axios.get<{
+      item1: { examsCount: number; pageCount: number };
+      item2: ExamInfo[];
+    }>(`/Exam/Select/Exam/BY/Month/${pageNumber}/${count}/${level}/${month}`);
     return {
       exams: res.data.item2,
       examsCount: res.data.item1.examsCount,

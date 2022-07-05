@@ -1,10 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchExamsByLevel, fetchExamById } from '../app/api';
+import { fetchExamsByLevel, fetchExamsByMonth, fetchExamById } from '../app/api';
 
 export const getExamsByLevel = createAsyncThunk('exams/level', fetchExamsByLevel);
+export const getExamsByMonth = createAsyncThunk('exams/month', fetchExamsByMonth);
 export const getExamById = createAsyncThunk('exam/id', fetchExamById);
-
-
 
 export interface ExamInfo {
   examId: number;
@@ -90,6 +89,22 @@ const exmasSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(getExamsByLevel.rejected, (state, action) => {
+        state.loading = false;
+        state.data = initialState.data;
+        state.error = <string>action.payload || 'خطا ف السيرقير';
+      });
+
+    // get exams by month
+    builder
+      .addCase(getExamsByMonth.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getExamsByMonth.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = '';
+        state.data = action.payload;
+      })
+      .addCase(getExamsByMonth.rejected, (state, action) => {
         state.loading = false;
         state.data = initialState.data;
         state.error = <string>action.payload || 'خطا ف السيرقير';

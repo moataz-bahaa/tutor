@@ -5,6 +5,9 @@ interface ComponentProps {
 }
 
 const Component: React.FC<ComponentProps> = ({ activePage, numberOfPages, setPage }) => {
+  if (!numberOfPages) {
+    return null;
+  }
   return (
     <div className='pagination mt-5'>
       <div
