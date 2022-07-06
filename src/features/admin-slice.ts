@@ -1,47 +1,61 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import axios from 'axios';
 
-const login = createAsyncThunk('admin/login', async () => {
-  const res = await fetch('https://jsonplaceholder.typicode.com/users');
-  const data = await res.json;
-  return data;
-});
-
-const logout = createAsyncThunk('admin/logout', async () => {
-  const res = await fetch('https://jsonplaceholder.typicode.com/users');
-  const data = await res.json;
-  return data;
-});
+export const login = createAsyncThunk(
+  'admin/login',
+  async (user: { username: string; password: string }, { rejectWithValue }) => {
+    try {
+      const res = await axios.get(
+        `/Teacher/Teacher/Authentication/${user.username}/${user.password}`
+      );
+      return res.data;
+    } catch (err: any) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
 
 interface Admin {}
 
 interface InitialState {
+  loading: boolean;
   isLoggedIn: boolean;
+  error: string;
   data: Admin;
 }
 
 const initialState: InitialState = {
+  loading: false,
   isLoggedIn: true,
+  error: '',
   data: {},
 };
 
 const adminSlice = createSlice({
   name: 'admin',
   initialState,
-  reducers: {},
+  reducers: {
+    logout: (state) => {
+      state.isLoggedIn = false;
+    }
+  },
   extraReducers: (builder) => {
     // login
     builder
-      .addCase(login.pending, (state) => {})
-      .addCase(login.rejected, (state) => {})
-      .addCase(login.fulfilled, (state, action: PayloadAction<Admin>) => {});
-
-    // logout
-    builder
-      .addCase(logout.pending, (state) => {})
-      .addCase(logout.rejected, (state) => {})
-      .addCase(logout.fulfilled, (state) => {});
+      .addCase(login.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(login.rejected, (state, action) => {
+        state.loading = false;
+        state.error = <string>action.payload;
+      })
+      .addCase(login.fulfilled, (state, action: PayloadAction<string>) => {
+        state.loading = false;
+        state.error = '';
+        state.isLoggedIn = true;
+      });
   },
 });
 
 export default adminSlice.reducer;
-export const {} = adminSlice.actions;
+export const { logout } = adminSlice.actions;

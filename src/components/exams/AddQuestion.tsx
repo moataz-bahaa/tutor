@@ -32,10 +32,7 @@ const AddQuestion: React.FC<AddQuestionProps> = (props) => {
 
   return (
     <div className='add-question mb-1'>
-      <button
-        className='btn btn-lg-lg btn-blue'
-        onClick={() => setIsOpen(true)}
-      >
+      <button className='btn btn-lg-lg btn-blue' onClick={() => setIsOpen(true)}>
         اضاقة سؤال
       </button>
       <Modal

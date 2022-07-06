@@ -1,25 +1,26 @@
 import Alert from '../Alert';
 import { useReactMediaRecorder } from 'react-media-recorder';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useAppDispatch } from '../../app/hooks';
+import { uploadVideo } from '../../features/videos-slice';
 
 interface ComponentProps {}
 
 const Component: React.FC<ComponentProps> = (props) => {
+  const [blob, setBlob] = useState({} as Blob);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const {
-    status,
-    startRecording,
-    stopRecording,
-    error,
-    mediaBlobUrl,
-    previewStream,
-  } = useReactMediaRecorder({
-    screen: true,
-    onStop: (blobUrl, blob) => {
-      console.log(blob);
-      alert('توقف التسسجيل');
-    },
-  });
+  const dispatch = useAppDispatch();
+  const { status, startRecording, stopRecording, error, mediaBlobUrl, previewStream } =
+    useReactMediaRecorder({
+      screen: true,
+      onStop: (blobUrl, blob) => {
+        alert('توقف التسسجيل');
+        // const file = new File([blob], 'test.wav', {
+        //   type: blob.type,
+        // });
+        setBlob(blob);
+      },
+    });
 
   useEffect(() => {
     if (videoRef.current && previewStream) {
@@ -32,7 +33,7 @@ const Component: React.FC<ComponentProps> = (props) => {
   }
 
   return (
-    <div className='container pt-10 pb-5 video-recorder'>
+    <div className='container py-5 pb-5 video-recorder'>
       <div className='info row g-2'>
         <button className='col-12 col-md-6 btn btn-lg btn-blue' onClick={startRecording}>
           ابدا التسجيل
@@ -49,15 +50,9 @@ const Component: React.FC<ComponentProps> = (props) => {
             >
               تحميل الفيديو
             </a>
-            <button
-              className="col-12 col-md-6 btn btn-lg btn-blue"
-              onClick={() => {
-                fetch(mediaBlobUrl!)
-                  .then(res => {
-                    console.log(res);
-                  })
-              }}
-            >
+            <button className='col-12 col-md-6 btn btn-lg btn-blue' onClick={() => {
+              // dispatch(uploadVideo({} as FormData));
+            }}>
               ارفع الفديو
             </button>
           </>

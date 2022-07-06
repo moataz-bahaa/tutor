@@ -1,9 +1,17 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchExamsByLevel, fetchExamsByMonth, fetchExamById } from '../app/api';
+import {
+  fetchExamsByLevel,
+  fetchExamsByMonth,
+  fetchExamDetailsById,
+  fetchExamQuestionsById,
+  addExam
+} from '../app/api';
 
 export const getExamsByLevel = createAsyncThunk('exams/level', fetchExamsByLevel);
 export const getExamsByMonth = createAsyncThunk('exams/month', fetchExamsByMonth);
-export const getExamById = createAsyncThunk('exam/id', fetchExamById);
+export const getExamDetailsById = createAsyncThunk('exam/details/id', fetchExamDetailsById);
+export const getExamQuestionsById = createAsyncThunk('exam/questions/id', fetchExamQuestionsById);
+export const addExamAction = createAsyncThunk('exam/add', addExam);
 
 export interface ExamInfo {
   examId: number;
@@ -110,19 +118,49 @@ const exmasSlice = createSlice({
         state.error = <string>action.payload || 'خطا ف السيرقير';
       });
 
-    // get exam by id
+    // get exam details by id
     builder
-      .addCase(getExamById.pending, (state) => {
+      .addCase(getExamDetailsById.pending, (state) => {
         state.loading = true;
       })
-      .addCase(getExamById.fulfilled, (state, action) => {
+      .addCase(getExamDetailsById.fulfilled, (state, action) => {
         state.loading = false;
         state.error = '';
-        state.curExam = action.payload;
+        state.curExam.details = action.payload;
       })
-      .addCase(getExamById.rejected, (state, action) => {
+      .addCase(getExamDetailsById.rejected, (state, action) => {
         state.loading = false;
         state.curExam = initialState.curExam;
+        state.error = <string>action.payload || 'خطا ف السيرقير';
+      });
+
+    // get exam questions by id
+    builder
+      .addCase(getExamQuestionsById.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getExamQuestionsById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = '';
+        state.curExam.questions = action.payload;
+      })
+      .addCase(getExamQuestionsById.rejected, (state, action) => {
+        state.loading = false;
+        state.curExam = initialState.curExam;
+        state.error = <string>action.payload || 'خطا ف السيرقير';
+      });
+
+    // add exam
+    builder
+      .addCase(addExamAction.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(addExamAction.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = '';
+      })
+      .addCase(addExamAction.rejected, (state, action) => {
+        state.loading = false;
         state.error = <string>action.payload || 'خطا ف السيرقير';
       });
   },

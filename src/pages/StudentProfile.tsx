@@ -32,12 +32,12 @@ const StudentProfile: React.FC<StudentProfileProps> = (props) => {
 
   return (
     <div className='student-profile'>
-      <div className='container pt-10'>
+      <div className='container py-5'>
         <div className='row g-3 mb-3'>
           <div className='col-12 col-lg-4 mb-1 img-container'>
             <img src='../images/student-male.jpg' alt='student' />
           </div>
-          <ul className='col-12 col-lg-8 list-items pt-lg-5'>
+          <ul className='col-12 col-lg-8 list-items'>
             <li>اسم الطالب: {student.studentName}</li>
             <li>الرقم التعريفى: {student.studentId}</li>
             <li>الايميل: {student.studentEmail}</li>

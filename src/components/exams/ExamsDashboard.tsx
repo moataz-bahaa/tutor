@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import FilterExams from './FilterExams';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import Alert from '../Alert';
@@ -7,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import Pagination from '../Pagination';
 import { useState, useEffect } from 'react';
 import { getExamsByLevel, getExamsByMonth } from '../../features/exam-slice';
+import AddExam from './AddExam';
 
 interface ExamsDashboardProps {}
 
@@ -47,9 +47,7 @@ const ExamsDashboard: React.FC<ExamsDashboardProps> = (props) => {
 
   return (
     <div className='exams-dashboard'>
-      <Link className='btn btn-lg-lg btn-blue mb-2' to='/exam/328221'>
-        اضافة امتحان
-      </Link>
+      <AddExam />
       <FilterExams current={current} setCurrent={setCurrent} />
       <h1 className='title'>الامتحانات</h1>
       {loading ? (
@@ -70,7 +68,7 @@ const ExamsDashboard: React.FC<ExamsDashboardProps> = (props) => {
             <tbody>
               {exams.map((exam, index) => {
                 return (
-                  <tr key={exam.examId} onClick={() => navigate(`/exam/${exam.examId}`)}>
+                  <tr key={exam.examId} onClick={() => navigate(`/exam-details/${exam.examId}`)}>
                     <td>{index + 1}</td>
                     <td>{exam.examId}</td>
                     <td>{exam.examName}</td>

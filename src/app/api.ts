@@ -1,12 +1,7 @@
 import axios from 'axios';
 import { Student } from '../features/students-slice';
 import { Video } from '../features/videos-slice';
-import {
-  ExamDetails,
-  ExamInfo,
-  ExamWithQuestions,
-  getExamById,
-} from '../features/exam-slice';
+import { ExamDetails, ExamInfo, ExamWithQuestions } from '../features/exam-slice';
 
 axios.defaults.baseURL = 'http://mobisite201.somee.com/api';
 // axios.defaults.timeout = 10000;
@@ -289,31 +284,38 @@ export const fetchExamsByMonth = async (
 };
 
 // Exam/Select/Exam/For/Student/BY/1
-export const fetchExamById = async (id: number, { rejectWithValue }: any) => {
+export const fetchExamDetailsById = async (id: number, { rejectWithValue }: any) => {
   try {
-    const res1 = await axios.get<ExamDetails>(`/Exam/Select/Exam/BY/ID/${id}`);
-    console.log({ res1 });
-    const res2 = await axios.get<{ Exam: ExamWithQuestions[] }>(
-      `/Exam/Select/Exam/For/Student/BY/${id}`
-    );
-    return {
-      details: res1.data,
-      questions: res2.data.Exam[0].ExamQuestions,
-    };
+    const res = await axios.get<ExamDetails>(`/Exam/Select/Exam/BY/ID/${id}`);
+    return res.data;
   } catch (error: any) {
     return rejectWithValue(error.response.data);
   }
 };
 
-export const addExam = async () => {};
+export const fetchExamQuestionsById = async (id: number, { rejectWithValue }: any) => {
+  try {
+    const res = await axios.get<{ Exam: ExamWithQuestions[] }>(
+      `/Exam/Select/Exam/For/Student/BY/${id}`
+    );
+    return res.data.Exam[0].ExamQuestions;
+  } catch (error: any) {
+    // error.response.data => error return from server ''
+    // return rejectWithValue(error.response.data);
+    return [];
+  }
+};
 
-export const addQuestionToExam = async (ExamId: number, { rejectWithValue }: any) => {
-  /**
-   * add quetesin
-   * add answer
-   *
-   *
-   *
-   */
+export const addExam = async (obj: {exam: {}; callback: Function}, { rejectWithValue }: any) => {
+  try {
+    const res = await axios.post('/Exam/Insert/Exam', obj.exam);
+    const id = res.headers.location.split('/').at(-1);
+    // alert('تم اضافة الامتحان بنجاح');
+    // call back to navigate to /exam-detail/:id
+    obj.callback(id);
+    return res.data;
+  } catch (error: any) {
+    return rejectWithValue(error.response.data);
+  }
 };
 //#endregion

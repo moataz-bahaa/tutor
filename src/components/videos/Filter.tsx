@@ -113,7 +113,6 @@ const Component: React.FC<ComponentProps> = ({ current, setCurrent }) => {
         }}
       >
         <option hidden>اختر الاسبوع</option>
-
         {weeks.map((w) => (
           <option key={w.weeks.weekId} value={w.weeks.weekId}>
             {w.weeks.weekText}

@@ -1,16 +1,23 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaUserCircle } from 'react-icons/fa';
 import { useRef, useEffect, useState } from 'react';
+import { logout } from '../../features/admin-slice';
+import { useAppDispatch } from '../../app/hooks';
 
 interface ComponentProps {}
 
 const Component: React.FC<ComponentProps> = ({}) => {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const userMenuRef = useRef<any>();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const hideUserMenuOnClickOutside = (e: any) => {
-      if (showUserMenu && userMenuRef.current && !userMenuRef.current.contains(e.target)) {
+      if (
+        showUserMenu &&
+        userMenuRef.current &&
+        !userMenuRef.current.contains(e.target)
+      ) {
         setShowUserMenu(false);
       }
     };
@@ -37,11 +44,10 @@ const Component: React.FC<ComponentProps> = ({}) => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 40 }}
           >
-            <div className='user-menu-item'>تسجيل الخروج</div>
-            <div className='user-menu-item'>تسجيل الخروج</div>
-            <div className='user-menu-item'>تسجيل الخروج</div>
-            <div className='user-menu-item'>تسجيل الخروج</div>
-            <div className='user-menu-item'>تسجيل الخروج</div>
+            <div className='user-menu-item'>البروفايل</div>
+            <div className='user-menu-item' onClick={() => dispatch(logout())}>
+              تسجيل الخروج
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

@@ -8,10 +8,16 @@ interface ModalProps {
   header: string;
   show: boolean;
   closeButton: boolean;
-  footerButton?: {
-    text: string;
-    onClick: () => void;
-  };
+  footerButton?:
+    | {
+        text: string;
+        onClick?: () => void;
+      }
+    | {
+        text: string;
+        type: 'submit';
+        form: string;
+      };
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -51,18 +57,12 @@ const Modal: React.FC<ModalProps> = ({
             {children}
             <div className='modal-content-footer d-flex flex-end'>
               {closeButton && (
-                <button
-                  className='btn btn-lg-lg btn-danger ml-1'
-                  onClick={onClose}
-                >
+                <button className='btn btn-lg-lg btn-danger ml-1' onClick={onClose}>
                   اغلق
                 </button>
               )}
               {footerButton && (
-                <button
-                  className='btn btn-lg-lg btn-blue'
-                  onClick={footerButton.onClick}
-                >
+                <button className='btn btn-lg-lg btn-blue' {...footerButton}>
                   {footerButton.text}
                 </button>
               )}

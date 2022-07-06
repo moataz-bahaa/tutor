@@ -5,7 +5,7 @@ interface NotFoundPageProps {
 const NotFoundPage: React.FC<NotFoundPageProps> = ({ message }) => {
   return (
     <div className='not-found-page'>
-      <div className='container pt-10'>
+      <div className='container py-5'>
         {message ? (
           <div>{message}</div>
         ) : (

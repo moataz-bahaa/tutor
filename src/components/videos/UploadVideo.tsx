@@ -4,7 +4,6 @@ import { useAppDispatch } from '../../app/hooks';
 import { uploadVideo } from '../../features/videos-slice';
 import { NavLink } from 'react-router-dom';
 
-
 interface UploadVideoProps {}
 
 const UploadVideo: React.FC<UploadVideoProps> = (props) => {
@@ -44,7 +43,8 @@ const UploadVideo: React.FC<UploadVideoProps> = (props) => {
     });
   };
 
-  const handleUploadVideo = () => {
+  const handleUploadVideo = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (!file) {
       alert('اختؤ ملف اولا');
       return;
@@ -81,7 +81,8 @@ const UploadVideo: React.FC<UploadVideoProps> = (props) => {
         header='ارفع فيديو'
         footerButton={{
           text: 'ارفع',
-          onClick: handleUploadVideo,
+          type: 'submit',
+          form: 'video-form',
         }}
         show={showModal}
       >
@@ -98,8 +99,9 @@ const UploadVideo: React.FC<UploadVideoProps> = (props) => {
         >
           {file ? file.name : 'امسك الملف واتركه هنا'}
         </div>
-        <form>
+        <form id='video-form' onSubmit={handleUploadVideo}>
           <input
+            required
             className='form-control mb-1'
             name='name'
             value={videoData.name}
@@ -108,6 +110,7 @@ const UploadVideo: React.FC<UploadVideoProps> = (props) => {
             placeholder='اسم الفديو'
           />
           <input
+            required
             className='form-control mb-1'
             name='number'
             value={videoData.number}
@@ -116,6 +119,7 @@ const UploadVideo: React.FC<UploadVideoProps> = (props) => {
             placeholder='رقم الفديو'
           />
           <input
+            required
             className='form-control mb-1'
             name='week'
             value={videoData.week}
@@ -126,6 +130,7 @@ const UploadVideo: React.FC<UploadVideoProps> = (props) => {
             max={4}
           />
           <input
+            required
             className='form-control mb-1'
             name='month'
             value={videoData.month}
@@ -136,6 +141,7 @@ const UploadVideo: React.FC<UploadVideoProps> = (props) => {
             max={12}
           />
           <input
+            required
             className='form-control mb-1'
             name='date'
             value={videoData.date}
@@ -143,6 +149,7 @@ const UploadVideo: React.FC<UploadVideoProps> = (props) => {
             type='date'
           />
           <input
+            required
             className='form-control mb-1'
             name='note'
             value={videoData.note}
@@ -151,6 +158,7 @@ const UploadVideo: React.FC<UploadVideoProps> = (props) => {
             placeholder='ملاحظات'
           />
           <input
+            required
             className='form-control mb-1'
             name='level'
             value={videoData.level}
