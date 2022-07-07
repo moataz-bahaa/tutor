@@ -37,12 +37,6 @@ const AddQuestion: React.FC<AddQuestionProps> = ({ examId }) => {
   });
   const dispatch = useAppDispatch();
 
-  // const { loading } = useAppSelector((state) => {
-  //   return {
-  //     loading: state.exams.loading,
-  //   };
-  // });
-
   const addAnswer = () => {
     setState((prev) => {
       return {
@@ -119,7 +113,7 @@ const AddQuestion: React.FC<AddQuestionProps> = ({ examId }) => {
           </div>
           {state.answers.map((answer, index) => {
             return (
-              <div key={Math.random()} className='row g-1 mb-1'>
+              <div key={index} className='row g-1 mb-1'>
                 <input
                   required
                   type='text'
@@ -147,7 +141,7 @@ const AddQuestion: React.FC<AddQuestionProps> = ({ examId }) => {
               </div>
             );
           })}
-          {/* {state.answers.length > 0 && (
+          {state.answers.length > 0 && (
             <select
               required
               className='form-control mb-1'
@@ -167,7 +161,7 @@ const AddQuestion: React.FC<AddQuestionProps> = ({ examId }) => {
                 </option>
               ))}
             </select>
-          )} */}
+          )}
           <button type='button' className='btn btn-blue' onClick={addAnswer}>
             اضافة اجابه
           </button>
