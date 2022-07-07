@@ -2,6 +2,7 @@ import axios from 'axios';
 import { Student } from '../features/students-slice';
 import { Video } from '../features/videos-slice';
 import { ExamDetails, ExamInfo, ExamWithQuestions } from '../features/exam-slice';
+import { State as Question } from '../components/exams/AddQuestion';
 
 axios.defaults.baseURL = 'http://mobisite201.somee.com/api';
 // axios.defaults.timeout = 10000;
@@ -306,7 +307,10 @@ export const fetchExamQuestionsById = async (id: number, { rejectWithValue }: an
   }
 };
 
-export const addExam = async (obj: {exam: {}; callback: Function}, { rejectWithValue }: any) => {
+export const addExam = async (
+  obj: { exam: {}; callback: Function },
+  { rejectWithValue }: any
+) => {
   try {
     const res = await axios.post('/Exam/Insert/Exam', obj.exam);
     const id = res.headers.location.split('/').at(-1);
@@ -314,6 +318,32 @@ export const addExam = async (obj: {exam: {}; callback: Function}, { rejectWithV
     // call back to navigate to /exam-detail/:id
     obj.callback(id);
     return res.data;
+  } catch (error: any) {
+    return rejectWithValue(error.response.data);
+  }
+};
+
+export const addQuestionToExam = async (
+  { question, answers, correctAnswerNumber }: Question,
+  { rejectWithValue }: any
+) => {
+  try {
+    const res1 = await axios.post('/Exam/Insert/Exam/Question', question);
+    const questionId = +res1.headers.location.split('/').at(-1)!;
+
+    for (let answer of answers) {
+      const res2 = await axios.post('/Exam/Insert/Exam/Question/Answer', {
+        ...answer,
+        questionId,
+      });
+    }
+
+    const res3 = await axios.post('/Exam/Insert/Correct/Answer', {
+      correctAnswerNumber,
+      questionId,
+    });
+
+    return {};
   } catch (error: any) {
     return rejectWithValue(error.response.data);
   }

@@ -41,7 +41,7 @@ const Component: React.FC<ComponentProps> = ({}) => {
       {questions.map((q) => {
         return <Question key={q.QuestionID} question={q} />;
       })}
-      <AddQuestion />
+      <AddQuestion examId={+id!} />
     </div>
   );
 };

@@ -4,7 +4,8 @@ import {
   fetchExamsByMonth,
   fetchExamDetailsById,
   fetchExamQuestionsById,
-  addExam
+  addExam,
+  addQuestionToExam,
 } from '../app/api';
 
 export const getExamsByLevel = createAsyncThunk('exams/level', fetchExamsByLevel);
@@ -12,6 +13,7 @@ export const getExamsByMonth = createAsyncThunk('exams/month', fetchExamsByMonth
 export const getExamDetailsById = createAsyncThunk('exam/details/id', fetchExamDetailsById);
 export const getExamQuestionsById = createAsyncThunk('exam/questions/id', fetchExamQuestionsById);
 export const addExamAction = createAsyncThunk('exam/add', addExam);
+export const addQuestion = createAsyncThunk('exam/add/question', addQuestionToExam);
 
 export interface ExamInfo {
   examId: number;
@@ -160,6 +162,20 @@ const exmasSlice = createSlice({
         state.error = '';
       })
       .addCase(addExamAction.rejected, (state, action) => {
+        state.loading = false;
+        state.error = <string>action.payload || 'خطا ف السيرقير';
+      });
+
+    // add question to exam
+    builder
+      .addCase(addQuestion.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(addQuestion.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = '';
+      })
+      .addCase(addQuestion.rejected, (state, action) => {
         state.loading = false;
         state.error = <string>action.payload || 'خطا ف السيرقير';
       });

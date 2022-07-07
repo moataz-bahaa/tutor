@@ -1,33 +1,61 @@
 import Modal from '../Modal';
 import React, { useState } from 'react';
+import { useAppDispatch } from '../../app/hooks';
+import { addQuestion, getExamQuestionsById } from '../../features/exam-slice';
 
-interface AddQuestionProps {}
+interface AddQuestionProps {
+  examId: number;
+}
 
-type Question = {
-  text: string;
-  answers: {
-    'answer-1': string;
-    'answer-2': string;
-    'answer-3': string;
-    'answer-4': string;
-  };
-  correctAnswerNumber: number;
-};
+interface Question {
+  questionNumber: string;
+  questionText: string;
+  examId: number;
+}
 
-const AddQuestion: React.FC<AddQuestionProps> = (props) => {
+interface Answer {
+  answerNumber: string;
+  answerText: string;
+}
+
+export interface State {
+  question: Question;
+  answers: Answer[];
+  correctAnswerNumber: string;
+}
+
+const AddQuestion: React.FC<AddQuestionProps> = ({ examId }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [question, setQuestion] = useState<Question>({} as Question);
+  const [state, setState] = useState<State>({
+    question: {
+      questionNumber: '',
+      questionText: '',
+      examId,
+    },
+    answers: [],
+    correctAnswerNumber: '',
+  });
+  const dispatch = useAppDispatch();
 
-  const handleChangeOnInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setQuestion((q) => {
+  // const { loading } = useAppSelector((state) => {
+  //   return {
+  //     loading: state.exams.loading,
+  //   };
+  // });
+
+  const addAnswer = () => {
+    setState((prev) => {
       return {
-        ...q,
-        answers: {
-          ...q.answers,
-          [e.target.name]: e.target.value,
-        },
+        ...prev,
+        answers: [...prev.answers, { answerNumber: '', answerText: '' }],
       };
     });
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    dispatch(addQuestion(state));
+    dispatch(getExamQuestionsById(examId));
   };
 
   return (
@@ -41,113 +69,108 @@ const AddQuestion: React.FC<AddQuestionProps> = (props) => {
         closeButton
         footerButton={{
           text: 'اضاقة',
-          onClick: () => {
-            console.log(question);
-            // setIsOpen(false);
-          },
+          type: 'submit',
+          form: 'add-question-form',
         }}
         show={isOpen}
       >
-        <form className='question-form py-1'>
-          <div className='row mb-1'>
-            <div className='col-12 col-md-2'>
-              <label>السؤال</label>
-            </div>
-            <div className='col-12 col-md-10'>
-              <textarea
-                name=''
-                id=''
-                className='form-control'
-                onChange={(e) => {
-                  setQuestion((q) => {
-                    return {
-                      ...q,
-                      text: e.target.value,
-                    };
-                  });
-                }}
-              />
-            </div>
+        <form
+          id='add-question-form'
+          className='question-form py-1'
+          onSubmit={handleSubmit}
+        >
+          <div className='row g-1 mb-1'>
+            <input
+              required
+              type='text'
+              className='col-2 form-control'
+              placeholder='رقم السؤال'
+              value={state.question.questionNumber}
+              onChange={(e) => {
+                setState((prev) => {
+                  return {
+                    ...prev,
+                    question: {
+                      ...prev.question,
+                      questionNumber: e.target.value,
+                    },
+                  };
+                });
+              }}
+            />
+            <input
+              required
+              type='text'
+              className='col-10 form-control'
+              placeholder='السؤال'
+              value={state.question.questionText}
+              onChange={(e) => {
+                setState((prev) => {
+                  return {
+                    ...prev,
+                    question: {
+                      ...prev.question,
+                      questionText: e.target.value,
+                    },
+                  };
+                });
+              }}
+            />
           </div>
-          <div className='row mb-1'>
-            <div className='col-12 col-md-2'>
-              <label>الاختيار الاول</label>
-            </div>
-            <div className='col-12 col-md-10'>
-              <input
-                type='text'
-                name='answer-1'
-                id=''
-                className='form-control'
-                onChange={handleChangeOnInput}
-              />
-            </div>
-          </div>
-          <div className='row mb-1'>
-            <div className='col-12 col-md-2'>
-              <label>الاختيار الثانى</label>
-            </div>
-            <div className='col-12 col-md-10'>
-              <input
-                type='text'
-                name='answer-2'
-                id=''
-                className='form-control'
-                onChange={handleChangeOnInput}
-              />
-            </div>
-          </div>
-          <div className='row mb-1'>
-            <div className='col-12 col-md-2'>
-              <label>الاختيار الثالث</label>
-            </div>
-            <div className='col-12 col-md-10'>
-              <input
-                type='text'
-                name='answer-3'
-                id=''
-                className='form-control'
-                onChange={handleChangeOnInput}
-              />
-            </div>
-          </div>
-          <div className='row mb-1'>
-            <div className='col-12 col-md-2'>
-              <label>الاختيار الرابع</label>
-            </div>
-            <div className='col-12 col-md-10'>
-              <input
-                type='text'
-                name='answer-4'
-                id=''
-                className='form-control'
-                onChange={handleChangeOnInput}
-              />
-            </div>
-          </div>
-          <div className='row mb-1'>
-            <div className='col-12 col-md-2'>
-              <label>الاجابه الصحيحه</label>
-            </div>
-            <div className='col-12 col-md-10'>
-              <select
-                className='form-control'
-                onChange={(e) => {
-                  setQuestion((q) => {
-                    return {
-                      ...q,
-                      correctAnswerNumber: +e.target.value,
-                    };
-                  });
-                }}
-              >
-                <option value='1'>الاختيار الاول</option>
-                <option value='2'>الاختيار الثانى</option>
-                <option value='3'>الاختيار الثالث</option>
-                <option value='4'>الاختيار الرابع</option>
-              </select>
-            </div>
-          </div>
+          {state.answers.map((answer, index) => {
+            return (
+              <div key={Math.random()} className='row g-1 mb-1'>
+                <input
+                  required
+                  type='text'
+                  className='col-2 form-control'
+                  placeholder='رقم الاجابه'
+                  value={answer.answerNumber}
+                  onChange={(e) => {
+                    const newState = { ...state };
+                    newState.answers[index].answerNumber = e.target.value;
+                    setState(newState);
+                  }}
+                />
+                <input
+                  required
+                  type='text'
+                  className='col-10 form-control'
+                  placeholder='الاجابه'
+                  value={answer.answerText}
+                  onChange={(e) => {
+                    const newState = { ...state };
+                    newState.answers[index].answerText = e.target.value;
+                    setState(newState);
+                  }}
+                />
+              </div>
+            );
+          })}
+          {/* {state.answers.length > 0 && (
+            <select
+              required
+              className='form-control mb-1'
+              value={state.correctAnswerNumber}
+              onChange={(e) => {
+                setState((prev) => {
+                  return {
+                    ...prev,
+                    correctAnswerNumber: e.target.value,
+                  };
+                });
+              }}
+            >
+              {state.answers.map((answer) => (
+                <option key={Math.random()} value={answer.answerNumber}>
+                  {answer.answerNumber}
+                </option>
+              ))}
+            </select>
+          )} */}
+          <button type='button' className='btn btn-blue' onClick={addAnswer}>
+            اضافة اجابه
+          </button>
         </form>
       </Modal>
     </div>
