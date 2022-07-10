@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { getExamQuestionsById } from '../features/exam-slice';
+import { fetchExamQuestionsById } from '../features/exams/examsActions';
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import Spinner from '../components/Spinner';
@@ -13,31 +13,36 @@ const Component: React.FC<ComponentProps> = ({}) => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(getExamQuestionsById(+id!));
+    dispatch(fetchExamQuestionsById(+id!));
   }, []);
 
   const { error, loading, questions } = useAppSelector((state) => {
+    const lastAction = state.lastAction;
     return {
-      loading: state.exams.loading,
       questions: state.exams.curExam.questions,
-      error: state.exams.error,
+      error: lastAction === fetchExamQuestionsById.rejected.type ? state.exams.error : '',
+      loading: state.exams.loading && lastAction === fetchExamQuestionsById.pending.type,
     };
   });
 
   if (loading) {
-    return <Spinner />;
+    return (
+      <div className='pt-10'>
+        <Spinner />
+      </div>
+    );
   }
 
-  if (error || !questions) {
+  if (error) {
     return (
-      <div className='container pt-5'>
-        <Alert message={error} variant='danger' />
+      <div className='container pt-10 pb-5'>
+        <Alert message={error || 'لا توجد اساله'} variant='danger' />
       </div>
     );
   }
 
   return (
-    <div className='container py-5 exam-questions'>
+    <div className='container pt-10 pb-5 exam-questions'>
       {questions.map((q) => {
         return <Question key={q.QuestionID} question={q} />;
       })}

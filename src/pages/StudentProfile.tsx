@@ -1,9 +1,12 @@
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { getStudentById } from '../features/students-slice';
+import { fetchStudentById } from '../features/students/students-actions';
 import { useEffect } from 'react';
 import NotFoundPage from '../components/NotFoundPage';
 import Spinner from '../components/Spinner';
+import StudentActions from '../components/students/StudentActions';
+import Alert from '../components/Alert';
+import { clearStudentsState } from '../features/students/students-slice';
 
 interface StudentProfileProps {}
 
@@ -11,27 +14,35 @@ const StudentProfile: React.FC<StudentProfileProps> = (props) => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(getStudentById(+id!));
+    dispatch(fetchStudentById(+id!));
+    return () => {
+      dispatch(clearStudentsState());
+    };
   }, []);
 
-  const { loading, error, student } = useAppSelector((state) => {
+  const { loading, error, student, lastAction } = useAppSelector((state) => {
     return {
       loading: state.students.loading,
       error: state.students.error,
       student: state.students.currentStudent,
+      lastAction: state.lastAction,
     };
   });
 
-  if (loading) {
-    return <Spinner />;
+  if (!student || (loading && lastAction === fetchStudentById.pending.type)) {
+    return (
+      <div className='pt-10'>
+        <Spinner />
+      </div>
+    );
   }
 
-  if (!id || error || !student) {
+  if (error && lastAction === fetchStudentById.rejected.type) {
     return <NotFoundPage message={error} />;
   }
 
   return (
-    <div className='student-profile'>
+    <div className='student-profile pt-10 pb-5'>
       <div className='container py-5'>
         <div className='row g-3 mb-3'>
           <div className='col-12 col-lg-4 mb-1 img-container'>
@@ -49,6 +60,11 @@ const StudentProfile: React.FC<StudentProfileProps> = (props) => {
             <li>عنوان الماك الخاص بموبايل الطالب: {student.studentMobileMacAdress}</li>
           </ul>
         </div>
+        <StudentActions studentId={student.studentId} authValue={student.authValue} />
+        {error &&
+          (lastAction === 'student/authenticate' || lastAction === 'student/delete') && (
+            <Alert message={error} variant='danger' />
+          )}
       </div>
     </div>
   );

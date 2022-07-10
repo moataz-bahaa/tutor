@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { useEffect } from 'react';
-import { getExamDetailsById } from '../features/exam-slice';
+import { fetchExamDetailsById } from '../features/exams/examsActions';
 import Alert from '../components/Alert';
 import Spinner from '../components/Spinner';
 import { Link } from 'react-router-dom';
@@ -12,7 +12,7 @@ const Exam: React.FC<AddExamProps> = (props) => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(getExamDetailsById(+id!));
+    dispatch(fetchExamDetailsById(+id!));
   }, []);
 
   const { error, loading, details } = useAppSelector((state) => {
@@ -24,7 +24,11 @@ const Exam: React.FC<AddExamProps> = (props) => {
   });
 
   if (loading) {
-    return <Spinner />;
+    return (
+      <div className='pt-10'>
+        <Spinner />
+      </div>
+    );
   }
 
   if (error || !details) {
@@ -36,7 +40,7 @@ const Exam: React.FC<AddExamProps> = (props) => {
   }
 
   return (
-    <div className='exam py-5'>
+    <div className='exam pt-10 pb-5'>
       <div className='container'>
         <>
           <ul className='list-items'>

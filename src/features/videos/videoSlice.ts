@@ -1,19 +1,12 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import {
-  fetchAllVideos,
-  postVideo,
   deleteVideoById,
+  fetchAllVideos,
   fetchVideosByLevel,
   fetchVideosByMonth,
-  fetchVideoByWeek,
-} from '../app/api';
-
-export const getAllVideos = createAsyncThunk('videos/getAll', fetchAllVideos);
-export const getVideosByLevel = createAsyncThunk('videos/level', fetchVideosByLevel);
-export const getVideosByMonth = createAsyncThunk('videos/month', fetchVideosByMonth);
-export const getVideosByWeek = createAsyncThunk('videos/week', fetchVideoByWeek);
-export const uploadVideo = createAsyncThunk('videos/upload', postVideo);
-export const deleteVideo = createAsyncThunk('videos/delete', deleteVideoById);
+  fetchVideosByWeek,
+  uploadVideo,
+} from './videoActions';
 
 export interface Video {
   videoId: number;
@@ -22,7 +15,7 @@ export interface Video {
 }
 
 export interface VideoDetails {
-  videoId: number
+  videoId: number;
   videoName: string;
   levelName: string;
   monthText: string;
@@ -33,14 +26,13 @@ export interface VideoDetails {
   videoPath: string;
 }
 
-
 interface InitialState {
   loading: boolean;
   data: {
     pageCount: number;
     videoCount: number;
     videos: Video[];
-  }
+  };
   error: string;
 }
 
@@ -57,63 +49,65 @@ const initialState: InitialState = {
 const videosSlice = createSlice({
   name: 'videos',
   initialState,
-  reducers: {},
+  reducers: {
+    clearVideosState: () => initialState,
+  },
   extraReducers: (builder) => {
     //#region get all videos
-    builder.addCase(getAllVideos.pending, (state) => {
+    builder.addCase(fetchAllVideos.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(getAllVideos.fulfilled, (state, action) => {
+    builder.addCase(fetchAllVideos.fulfilled, (state, action) => {
       state.loading = false;
       state.data = action.payload;
       state.error = '';
     });
-    builder.addCase(getAllVideos.rejected, (state, action) => {
+    builder.addCase(fetchAllVideos.rejected, (state, action) => {
       state.loading = false;
       state.error = <string>action.payload || 'خطا ف السيرفير';
     });
     //#endregion
 
     //#region get videos by level
-    builder.addCase(getVideosByLevel.pending, (state) => {
+    builder.addCase(fetchVideosByLevel.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(getVideosByLevel.fulfilled, (state, action) => {
+    builder.addCase(fetchVideosByLevel.fulfilled, (state, action) => {
       state.loading = false;
       state.data = action.payload;
       state.error = '';
     });
-    builder.addCase(getVideosByLevel.rejected, (state, action) => {
+    builder.addCase(fetchVideosByLevel.rejected, (state, action) => {
       state.loading = false;
       state.error = <string>action.payload || 'خطا ف السيرفير';
     });
     //#endregion
 
     //#region get videos by month
-    builder.addCase(getVideosByMonth.pending, (state) => {
+    builder.addCase(fetchVideosByMonth.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(getVideosByMonth.fulfilled, (state, action) => {
+    builder.addCase(fetchVideosByMonth.fulfilled, (state, action) => {
       state.loading = false;
       state.data = action.payload;
       state.error = '';
     });
-    builder.addCase(getVideosByMonth.rejected, (state, action) => {
+    builder.addCase(fetchVideosByMonth.rejected, (state, action) => {
       state.loading = false;
       state.error = <string>action.payload || 'خطا ف السيرفير';
     });
     //#endregion
 
     //#region get videos by week
-    builder.addCase(getVideosByWeek.pending, (state) => {
+    builder.addCase(fetchVideosByWeek.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(getVideosByWeek.fulfilled, (state, action) => {
+    builder.addCase(fetchVideosByWeek.fulfilled, (state, action) => {
       state.loading = false;
       state.data = action.payload;
       state.error = '';
     });
-    builder.addCase(getVideosByWeek.rejected, (state, action) => {
+    builder.addCase(fetchVideosByWeek.rejected, (state, action) => {
       state.loading = false;
       state.error = <string>action.payload || 'خطا ف السيرفير';
     });
@@ -135,10 +129,10 @@ const videosSlice = createSlice({
     //#endregion
 
     //#region delete video by id
-    builder.addCase(deleteVideo.pending, (state) => {
+    builder.addCase(deleteVideoById.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(deleteVideo.fulfilled, (state, action) => {
+    builder.addCase(deleteVideoById.fulfilled, (state, action) => {
       state.loading = false;
       state.error = '';
       const video = state.data.videos.find((v) => v.videoId === action.payload.id);
@@ -146,7 +140,7 @@ const videosSlice = createSlice({
       state.data.videos.splice(index, 1);
       alert('تم حذف الفديو');
     });
-    builder.addCase(deleteVideo.rejected, (state, action) => {
+    builder.addCase(deleteVideoById.rejected, (state, action) => {
       state.loading = false;
       state.error = <string>action.payload || 'خطا ف السيرفير';
     });
@@ -155,4 +149,4 @@ const videosSlice = createSlice({
 });
 
 export default videosSlice.reducer;
-// export const {} = videosSlice.actions;
+export const { clearVideosState } = videosSlice.actions;

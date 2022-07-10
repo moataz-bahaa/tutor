@@ -18,8 +18,8 @@ const Home: React.FC<HomeProps> = (props) => {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                 >
-                  <div className='line'>SOME TEXT</div>
-                  <div className='text'>Online Coaching Lessons Remote Learning</div>
+                  <div className='line'>مدرس خاص</div>
+                  <div className='text'>برنامج درس خصوصى، انتاج فريق mobisite</div>
                 </motion.div>
               </div>
               <div className='avatar col-12 col-lg-6'>

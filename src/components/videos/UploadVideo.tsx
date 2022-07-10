@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import Modal from '../Modal';
-import { useAppDispatch } from '../../app/hooks';
-import { uploadVideo } from '../../features/videos-slice';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { uploadVideo } from '../../features/videos/videoActions';
 import { NavLink } from 'react-router-dom';
+import { SpinnerForBtn } from '../Spinner';
+import Alert from '../Alert';
 
 interface UploadVideoProps {}
 
@@ -19,6 +21,13 @@ const UploadVideo: React.FC<UploadVideoProps> = (props) => {
     level: '',
   });
   const dispatch = useAppDispatch();
+  const { loading, error } = useAppSelector((state) => {
+    const lastAction = state.lastAction;
+    return {
+      loading: state.videos.loading && lastAction === uploadVideo.pending.type,
+      error: lastAction === uploadVideo.rejected.type ? state.videos.error : '',
+    };
+  });
 
   const preventDefault = (e: React.MouseEvent<HTMLDivElement>) => {
     return e.preventDefault();
@@ -60,7 +69,7 @@ const UploadVideo: React.FC<UploadVideoProps> = (props) => {
     formData.append('files', file);
 
     dispatch(uploadVideo(formData));
-    setShowModal(false);
+    // setShowModal(false);
   };
 
   return (
@@ -80,12 +89,13 @@ const UploadVideo: React.FC<UploadVideoProps> = (props) => {
         }}
         header='ارفع فيديو'
         footerButton={{
-          text: 'ارفع',
+          text: loading ? <SpinnerForBtn /> : 'ارفع',
           type: 'submit',
           form: 'video-form',
         }}
         show={showModal}
       >
+        {error && <Alert message={error} variant='danger' />}
         <div
           className='drag-drop my-2'
           onClick={handleSelectFile}

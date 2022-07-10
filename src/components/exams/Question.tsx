@@ -1,4 +1,4 @@
-import { Question } from '../../features/exam-slice';
+import { Question } from '../../features/exams/examsSlice';
 
 interface ComponentProps {
   question: Question;

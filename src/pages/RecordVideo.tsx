@@ -1,8 +1,8 @@
-import Alert from '../Alert';
+import Alert from '../components/Alert';
 import { useReactMediaRecorder } from 'react-media-recorder';
 import { useEffect, useRef, useState } from 'react';
-import { useAppDispatch } from '../../app/hooks';
-import { uploadVideo } from '../../features/videos-slice';
+import { useAppDispatch } from '../app/hooks';
+import { uploadVideo } from '../features/videos/videoActions';
 
 interface ComponentProps {}
 
@@ -33,7 +33,7 @@ const Component: React.FC<ComponentProps> = (props) => {
   }
 
   return (
-    <div className='container py-5 pb-5 video-recorder'>
+    <div className='container pt-10 pb-5 pb-5 video-recorder'>
       <div className='info row g-2'>
         <button className='col-12 col-md-6 btn btn-lg btn-blue' onClick={startRecording}>
           ابدا التسجيل
@@ -50,9 +50,12 @@ const Component: React.FC<ComponentProps> = (props) => {
             >
               تحميل الفيديو
             </a>
-            <button className='col-12 col-md-6 btn btn-lg btn-blue' onClick={() => {
-              // dispatch(uploadVideo({} as FormData));
-            }}>
+            <button
+              className='col-12 col-md-6 btn btn-lg btn-blue'
+              onClick={() => {
+                // dispatch(uploadVideo({} as FormData));
+              }}
+            >
               ارفع الفديو
             </button>
           </>

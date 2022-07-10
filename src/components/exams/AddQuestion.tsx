@@ -1,7 +1,9 @@
 import Modal from '../Modal';
 import React, { useState } from 'react';
-import { useAppDispatch } from '../../app/hooks';
-import { addQuestion, getExamQuestionsById } from '../../features/exam-slice';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { addQuestionToExam } from '../../features/exams/examsActions';
+import Alert from '../Alert';
+import { SpinnerForBtn } from '../Spinner';
 
 interface AddQuestionProps {
   examId: number;
@@ -37,6 +39,14 @@ const AddQuestion: React.FC<AddQuestionProps> = ({ examId }) => {
   });
   const dispatch = useAppDispatch();
 
+  const { loading, error } = useAppSelector((state) => {
+    const lastAction = state.lastAction;
+    return {
+      loading: state.exams.loading && lastAction === addQuestionToExam.pending.type,
+      error: lastAction === addQuestionToExam.rejected.type ? state.exams.error : '',
+    };
+  });
+
   const addAnswer = () => {
     setState((prev) => {
       return {
@@ -48,8 +58,7 @@ const AddQuestion: React.FC<AddQuestionProps> = ({ examId }) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(addQuestion(state));
-    dispatch(getExamQuestionsById(examId));
+    dispatch(addQuestionToExam(state));
   };
 
   return (
@@ -62,12 +71,13 @@ const AddQuestion: React.FC<AddQuestionProps> = ({ examId }) => {
         onClose={() => setIsOpen(false)}
         closeButton
         footerButton={{
-          text: 'اضاقة',
+          text: loading ? <SpinnerForBtn /> : 'اضاقة',
           type: 'submit',
           form: 'add-question-form',
         }}
         show={isOpen}
       >
+        {error && <Alert message={error} variant='danger' />}
         <form
           id='add-question-form'
           className='question-form py-1'

@@ -1,19 +1,5 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import axios from 'axios';
-
-export const login = createAsyncThunk(
-  'admin/login',
-  async (user: { username: string; password: string }, { rejectWithValue }) => {
-    try {
-      const res = await axios.get(
-        `/Teacher/Teacher/Authentication/${user.username}/${user.password}`
-      );
-      return res.data;
-    } catch (err: any) {
-      return rejectWithValue(err.response.data);
-    }
-  }
-);
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { login } from './adminActions';
 
 interface Admin {}
 
@@ -37,7 +23,7 @@ const adminSlice = createSlice({
   reducers: {
     logout: (state) => {
       state.isLoggedIn = false;
-    }
+    },
   },
   extraReducers: (builder) => {
     // login

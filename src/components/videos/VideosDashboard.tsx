@@ -2,18 +2,20 @@ import UploadVideo from './UploadVideo';
 import { FcVideoFile } from 'react-icons/fc';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
-  getAllVideos,
-  deleteVideo,
-  getVideosByLevel,
-  getVideosByMonth,
-  getVideosByWeek,
-} from '../../features/videos-slice';
+  fetchAllVideos,
+  deleteVideoById,
+  fetchVideosByLevel,
+  fetchVideosByMonth,
+  fetchVideosByWeek,
+} from '../../features/videos/videoActions';
+import { clearVideosState } from '../../features/videos/videoSlice';
 import { useEffect, useState } from 'react';
 import Spinner from '../Spinner';
 import Alert from '../Alert';
 import { MdDelete } from 'react-icons/md';
 import Pagination from '../Pagination';
 import Filter from './Filter';
+import { SpinnerForBtn } from '../Spinner';
 
 interface ComponentProps {}
 
@@ -30,12 +32,12 @@ const Component: React.FC<ComponentProps> = (props) => {
   const dispatch = useAppDispatch();
   useEffect(() => {
     if (current.type === 'all') {
-      dispatch(getAllVideos({ pageNumber: current.page }));
+      dispatch(fetchAllVideos({ pageNumber: current.page }));
     } else if (current.type === 'level') {
-      dispatch(getVideosByLevel({ level: current.level!, pageNumber: current.page }));
+      dispatch(fetchVideosByLevel({ level: current.level!, pageNumber: current.page }));
     } else if (current.type === 'level-month') {
       dispatch(
-        getVideosByMonth({
+        fetchVideosByMonth({
           level: current.level!,
           month: current.month!,
           pageNumber: current.page,
@@ -43,7 +45,7 @@ const Component: React.FC<ComponentProps> = (props) => {
       );
     } else if (current.type === 'level-month-week') {
       dispatch(
-        getVideosByWeek({
+        fetchVideosByWeek({
           level: current.level!,
           month: current.month!,
           week: current.week!,
@@ -51,16 +53,35 @@ const Component: React.FC<ComponentProps> = (props) => {
         })
       );
     }
+
+    return () => {
+      dispatch(clearVideosState());
+    };
   }, [current]);
 
-  const { error, videos, loading, numberOfPages } = useAppSelector((state) => {
-    return {
-      loading: state.videos.loading,
-      videos: state.videos.data.videos,
-      numberOfPages: state.videos.data.pageCount,
-      error: state.videos.error,
-    };
-  });
+  const { error, videos, loading, numberOfPages, lastAction } = useAppSelector(
+    (state) => {
+      const lastAction = state.lastAction;
+      return {
+        loading:
+          state.videos.loading &&
+          (lastAction === fetchAllVideos.pending.type ||
+            lastAction === fetchVideosByLevel.pending.type ||
+            lastAction === fetchVideosByMonth.pending.type ||
+            lastAction === fetchVideosByWeek.pending.type),
+        videos: state.videos.data.videos,
+        numberOfPages: state.videos.data.pageCount,
+        error:
+          lastAction === fetchAllVideos.rejected.type ||
+          lastAction === fetchVideosByLevel.rejected.type ||
+          lastAction === fetchVideosByMonth.rejected.type ||
+          lastAction === fetchVideosByWeek.rejected.type
+            ? state.videos.error
+            : '',
+        lastAction,
+      };
+    }
+  );
 
   return (
     <div className='videos-dashboard'>
@@ -82,12 +103,16 @@ const Component: React.FC<ComponentProps> = (props) => {
                   </div>
                   <div className='rest'>
                     <FcVideoFile className='video-icon' />
-                    <MdDelete
-                      className='delete-icon'
-                      onClick={() => {
-                        dispatch(deleteVideo(video.videoId));
-                      }}
-                    />
+                    {lastAction === deleteVideoById.pending.type ? (
+                      <SpinnerForBtn className= 'delete-icon' />
+                    ) : (
+                      <MdDelete
+                        className='delete-icon'
+                        onClick={() => {
+                          dispatch(deleteVideoById(video.videoId));
+                        }}
+                      />
+                    )}
                   </div>
                 </div>
               );

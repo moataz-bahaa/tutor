@@ -11,10 +11,10 @@
 body {
   overflow-x: hidden;
   direction: rtl;
-  margin-top: 100px;
 }
 
-ul, ol {
+ul,
+ol {
   list-style: none;
 }
 
@@ -69,5 +69,18 @@ body::-webkit-scrollbar-thumb {
       background-color: $main-blue;
       color: $white;
     }
+  }
+}
+
+.spinner {
+  animation: spin infinite 2s linear;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }

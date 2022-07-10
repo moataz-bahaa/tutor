@@ -1,15 +1,18 @@
-import { configureStore } from '@reduxjs/toolkit';
-import adminReducer from '../features/admin-slice';
-import videosReducer from '../features/videos-slice';
-import studentsReducer from '../features/students-slice';
-import examsReducer from '../features/exam-slice';
+import { configureStore, PayloadAction } from '@reduxjs/toolkit';
+import adminReducer from '../features/admin/adminSlice';
+import videosReducer from '../features/videos/videoSlice';
+import studentsReducer from '../features/students/students-slice';
+import examsReducer from '../features/exams/examsSlice';
 
 const store = configureStore({
   reducer: {
     admin: adminReducer,
     videos: videosReducer,
     students: studentsReducer,
-    exams: examsReducer
+    exams: examsReducer,
+    lastAction: (state = null, action) => {
+      return action.type;
+    },
   },
 });
 

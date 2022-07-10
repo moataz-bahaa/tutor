@@ -23,7 +23,7 @@ const Dashboard: React.FC<DashboardProps> = (props) => {
     }
   ]
   return (
-    <div className='dashboard py-5'>
+    <div className='dashboard pt-10 pb-5'>
       <div className='container'>
         <Dropdown 
           title='اختر'

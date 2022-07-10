@@ -10,11 +10,11 @@ interface ModalProps {
   closeButton: boolean;
   footerButton?:
     | {
-        text: string;
+        text: string | JSX.Element;
         onClick?: () => void;
       }
     | {
-        text: string;
+        text: string | JSX.Element;
         type: 'submit';
         form: string;
       };

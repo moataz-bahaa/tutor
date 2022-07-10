@@ -5,7 +5,8 @@ import Spinner from '../Spinner';
 import { useNavigate } from 'react-router-dom';
 import Pagination from '../Pagination';
 import { useState, useEffect } from 'react';
-import { getExamsByLevel, getExamsByMonth } from '../../features/exam-slice';
+import { fetchExamsByLevel, fetchExamsByMonth } from '../../features/exams/examsActions';
+import { clearExamsState } from '../../features/exams/examsSlice';
 import AddExam from './AddExam';
 
 interface ExamsDashboardProps {}
@@ -24,24 +25,31 @@ const ExamsDashboard: React.FC<ExamsDashboardProps> = (props) => {
 
   useEffect(() => {
     if (current.type === 'level') {
-      dispatch(getExamsByLevel({ level: current.level!, pageNumber: current.page }));
+      dispatch(fetchExamsByLevel({ level: current.level!, pageNumber: current.page }));
     } else if (current.type === 'level-month') {
       dispatch(
-        getExamsByMonth({
+        fetchExamsByMonth({
           level: current.level!,
           month: current.month!,
           pageNumber: current.page,
         })
       );
     }
+    return () => {
+      dispatch(clearExamsState());
+    };
   }, [current]);
 
   const { loading, error, exams, numberOfPages } = useAppSelector((state) => {
+    const lastAction = state.lastAction;
     return {
-      loading: state.exams.loading,
       error: state.exams.error,
       exams: state.exams.data.exams,
       numberOfPages: state.exams.data.pageCount,
+      loading:
+        state.exams.loading &&
+        (lastAction === fetchExamsByLevel.pending.type ||
+          lastAction == fetchExamsByMonth.pending.type),
     };
   });
 
@@ -68,7 +76,10 @@ const ExamsDashboard: React.FC<ExamsDashboardProps> = (props) => {
             <tbody>
               {exams.map((exam, index) => {
                 return (
-                  <tr key={exam.examId} onClick={() => navigate(`/exam-details/${exam.examId}`)}>
+                  <tr
+                    key={exam.examId}
+                    onClick={() => navigate(`/exam-details/${exam.examId}`)}
+                  >
                     <td>{index + 1}</td>
                     <td>{exam.examId}</td>
                     <td>{exam.examName}</td>

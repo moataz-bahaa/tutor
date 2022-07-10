@@ -6,14 +6,7 @@ import {
   fetchExamQuestionsById,
   addExam,
   addQuestionToExam,
-} from '../app/api';
-
-export const getExamsByLevel = createAsyncThunk('exams/level', fetchExamsByLevel);
-export const getExamsByMonth = createAsyncThunk('exams/month', fetchExamsByMonth);
-export const getExamDetailsById = createAsyncThunk('exam/details/id', fetchExamDetailsById);
-export const getExamQuestionsById = createAsyncThunk('exam/questions/id', fetchExamQuestionsById);
-export const addExamAction = createAsyncThunk('exam/add', addExam);
-export const addQuestion = createAsyncThunk('exam/add/question', addQuestionToExam);
+} from './examsActions';
 
 export interface ExamInfo {
   examId: number;
@@ -64,7 +57,7 @@ interface InitialState {
   };
   curExam: {
     details: ExamDetails | null;
-    questions: Question[] | null;
+    questions: Question[];
   };
   error: string;
 }
@@ -78,7 +71,7 @@ const initialState: InitialState = {
   },
   curExam: {
     details: null,
-    questions: null,
+    questions: [],
   },
   error: '',
 };
@@ -86,19 +79,21 @@ const initialState: InitialState = {
 const exmasSlice = createSlice({
   name: 'exams',
   initialState,
-  reducers: {},
+  reducers: {
+    clearExamsState: () => initialState
+  },
   extraReducers: (builder) => {
     // get exams by level
     builder
-      .addCase(getExamsByLevel.pending, (state) => {
+      .addCase(fetchExamsByLevel.pending, (state, action) => {
         state.loading = true;
       })
-      .addCase(getExamsByLevel.fulfilled, (state, action) => {
+      .addCase(fetchExamsByLevel.fulfilled, (state, action) => {
         state.loading = false;
         state.error = '';
         state.data = action.payload;
       })
-      .addCase(getExamsByLevel.rejected, (state, action) => {
+      .addCase(fetchExamsByLevel.rejected, (state, action) => {
         state.loading = false;
         state.data = initialState.data;
         state.error = <string>action.payload || 'خطا ف السيرقير';
@@ -106,15 +101,15 @@ const exmasSlice = createSlice({
 
     // get exams by month
     builder
-      .addCase(getExamsByMonth.pending, (state) => {
+      .addCase(fetchExamsByMonth.pending, (state) => {
         state.loading = true;
       })
-      .addCase(getExamsByMonth.fulfilled, (state, action) => {
+      .addCase(fetchExamsByMonth.fulfilled, (state, action) => {
         state.loading = false;
         state.error = '';
         state.data = action.payload;
       })
-      .addCase(getExamsByMonth.rejected, (state, action) => {
+      .addCase(fetchExamsByMonth.rejected, (state, action) => {
         state.loading = false;
         state.data = initialState.data;
         state.error = <string>action.payload || 'خطا ف السيرقير';
@@ -122,15 +117,15 @@ const exmasSlice = createSlice({
 
     // get exam details by id
     builder
-      .addCase(getExamDetailsById.pending, (state) => {
+      .addCase(fetchExamDetailsById.pending, (state, action) => {
         state.loading = true;
       })
-      .addCase(getExamDetailsById.fulfilled, (state, action) => {
+      .addCase(fetchExamDetailsById.fulfilled, (state, action) => {
         state.loading = false;
         state.error = '';
         state.curExam.details = action.payload;
       })
-      .addCase(getExamDetailsById.rejected, (state, action) => {
+      .addCase(fetchExamDetailsById.rejected, (state, action) => {
         state.loading = false;
         state.curExam = initialState.curExam;
         state.error = <string>action.payload || 'خطا ف السيرقير';
@@ -138,15 +133,15 @@ const exmasSlice = createSlice({
 
     // get exam questions by id
     builder
-      .addCase(getExamQuestionsById.pending, (state) => {
+      .addCase(fetchExamQuestionsById.pending, (state) => {
         state.loading = true;
       })
-      .addCase(getExamQuestionsById.fulfilled, (state, action) => {
+      .addCase(fetchExamQuestionsById.fulfilled, (state, action) => {
         state.loading = false;
         state.error = '';
         state.curExam.questions = action.payload;
       })
-      .addCase(getExamQuestionsById.rejected, (state, action) => {
+      .addCase(fetchExamQuestionsById.rejected, (state, action) => {
         state.loading = false;
         state.curExam = initialState.curExam;
         state.error = <string>action.payload || 'خطا ف السيرقير';
@@ -154,28 +149,30 @@ const exmasSlice = createSlice({
 
     // add exam
     builder
-      .addCase(addExamAction.pending, (state) => {
+      .addCase(addExam.pending, (state) => {
         state.loading = true;
       })
-      .addCase(addExamAction.fulfilled, (state, action) => {
+      .addCase(addExam.fulfilled, (state, action) => {
         state.loading = false;
         state.error = '';
+        alert('تمت الاضافه');
       })
-      .addCase(addExamAction.rejected, (state, action) => {
+      .addCase(addExam.rejected, (state, action) => {
         state.loading = false;
         state.error = <string>action.payload || 'خطا ف السيرقير';
       });
 
     // add question to exam
     builder
-      .addCase(addQuestion.pending, (state) => {
+      .addCase(addQuestionToExam.pending, (state) => {
         state.loading = true;
       })
-      .addCase(addQuestion.fulfilled, (state, action) => {
+      .addCase(addQuestionToExam.fulfilled, (state, action) => {
         state.loading = false;
         state.error = '';
+        alert('تم اضافة السؤال');
       })
-      .addCase(addQuestion.rejected, (state, action) => {
+      .addCase(addQuestionToExam.rejected, (state, action) => {
         state.loading = false;
         state.error = <string>action.payload || 'خطا ف السيرقير';
       });
@@ -183,3 +180,4 @@ const exmasSlice = createSlice({
 });
 
 export default exmasSlice.reducer;
+export const { clearExamsState } = exmasSlice.actions;

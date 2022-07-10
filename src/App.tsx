@@ -8,12 +8,8 @@ import NotFoundPage from './components/NotFoundPage';
 import StudentProfile from './pages/StudentProfile';
 import Exam from './pages/ExamDetails';
 import PrivateRoute from '././components/PrivateRoute';
-import RecordVideo from './components/videos/RecordVideo';
-import ExamQuestions from './pages/ExamQuestions'
-// import { useEffect } from 'react';
-// import { useAppDispatch } from './app/hooks';
-// import { getAllStudents } from './features/students-slice'
-// import axios from 'axios';
+import RecordVideo from './pages/RecordVideo';
+import ExamQuestions from './pages/ExamQuestions';
 
 function App() {
   return (

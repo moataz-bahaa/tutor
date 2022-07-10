@@ -1,19 +1,17 @@
 import { motion } from 'framer-motion';
-import { MdDelete } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import {
-  getAllStudents,
-  deleteStudent,
-  authStudent,
-  getStudentsByLevel,
-  getStudentsByName,
-} from '../../features/students-slice';
+  fetchAllStudents,
+  fetchStudentsByLevel,
+  fetchStudentsByName,
+} from '../../features/students/students-actions';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useEffect, useState } from 'react';
 import Spinner from '../Spinner';
 import Pagination from '../Pagination';
 import FilterStudents from './FilterStudents';
 import Alert from '../Alert';
+import StudentActions from './StudentActions';
 
 interface StudentsDashboardProps {}
 
@@ -28,12 +26,14 @@ const StudentsDashboard: React.FC<StudentsDashboardProps> = (props) => {
 
   useEffect(() => {
     if (current.type === 'all') {
-      dispatch(getAllStudents({ pageNumber: current.activePage }));
+      dispatch(fetchAllStudents({ pageNumber: current.activePage }));
     } else if (current.type === 'level') {
-      dispatch(getStudentsByLevel({ pageNumber: current.activePage }));
+      dispatch(
+        fetchStudentsByLevel({ pageNumber: current.activePage, levelId: +current.value! })
+      );
     } else if (current.type === 'search') {
       dispatch(
-        getStudentsByName({
+        fetchStudentsByName({
           name: current.value as string,
           pageNumber: current.activePage,
         })
@@ -116,22 +116,10 @@ const StudentsDashboard: React.FC<StudentsDashboardProps> = (props) => {
                     {student.levelName || student.levelId}
                   </td>
                   <td>
-                    <button
-                      className='btn btn-green ml-md-1'
-                      onClick={() => {
-                        dispatch(authStudent(student));
-                      }}
-                    >
-                      {student.authValue ? 'قفل الحساب' : 'تنشيط الحساب'}
-                    </button>
-                    <button
-                      className='btn btn-danger'
-                      onClick={() => {
-                        dispatch(deleteStudent(student.studentId));
-                      }}
-                    >
-                      <MdDelete />
-                    </button>
+                    <StudentActions
+                      studentId={student.studentId}
+                      authValue={student.authValue}
+                    />
                   </td>
                 </motion.tr>
               );

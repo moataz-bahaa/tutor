@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import Modal from '../Modal';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { addExamAction } from '../../features/exam-slice';
+import { addExam } from '../../features/exams/examsActions';
 import { useNavigate } from 'react-router-dom';
+import { SpinnerForBtn } from '../Spinner';
 
 interface AddExamProps {}
 
@@ -19,7 +20,12 @@ const AddExam: React.FC<AddExamProps> = ({}) => {
   const [exam, setExam] = useState({} as Exam);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const loading = useAppSelector((state) => state.exams.loading);
+  const { loading } = useAppSelector((state) => {
+    return {
+      loading: state.exams.loading,
+      // lastAction: state.lastAction
+    };
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setExam((prev) => {
@@ -33,7 +39,7 @@ const AddExam: React.FC<AddExamProps> = ({}) => {
   const handleAddExam = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(
-      addExamAction({
+      addExam({
         exam,
         callback: (id: string) => navigate(`/exam-details/${id}`),
       })
@@ -41,7 +47,7 @@ const AddExam: React.FC<AddExamProps> = ({}) => {
   };
 
   return (
-    <div className='add-exam'>
+    <div className='add-exam mb-1'>
       <button className='btn btn-lg btn-blue' onClick={() => setShowModal(true)}>
         اضافة امتحان
       </button>
@@ -51,7 +57,7 @@ const AddExam: React.FC<AddExamProps> = ({}) => {
         closeButton
         onClose={() => setShowModal(false)}
         footerButton={{
-          text: loading ? 'جارى الاضافه...' : 'اضافة',
+          text: loading ? <SpinnerForBtn /> : 'اضافة',
           type: 'submit',
           form: 'add-exam-form',
         }}

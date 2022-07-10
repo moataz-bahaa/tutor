@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaUserCircle } from 'react-icons/fa';
 import { useRef, useEffect, useState } from 'react';
-import { logout } from '../../features/admin-slice';
+import { logout } from '../../features/admin/adminSlice';
 import { useAppDispatch } from '../../app/hooks';
 
 interface ComponentProps {}

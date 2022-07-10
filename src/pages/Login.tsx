@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import React, { useState } from 'react';
-import { login } from '../features/admin-slice';
+import { login } from '../features/admin/adminActions';
 import Alert from '../components/Alert';
 import { useNavigate } from 'react-router-dom';
 
