@@ -12,7 +12,7 @@ interface InitialState {
 
 const initialState: InitialState = {
   loading: false,
-  isLoggedIn: true,
+  isLoggedIn: false,
   error: '',
   data: {},
 };
