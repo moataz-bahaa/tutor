@@ -102,7 +102,10 @@ export const addExam = createAsyncThunk(
 
 export const addQuestionToExam = createAsyncThunk(
   'exam/add/question',
-  async ({ question, answers, correctAnswerNumber }: Question, { rejectWithValue, dispatch }) => {
+  async (
+    { question, answers, correctAnswerNumber }: Question,
+    { rejectWithValue, dispatch }
+  ) => {
     try {
       const res1 = await axios.post('/Exam/Insert/Exam/Question', question);
       const questionId = +res1.headers.location.split('/').at(-1)!;
@@ -121,6 +124,34 @@ export const addQuestionToExam = createAsyncThunk(
 
       dispatch(fetchExamQuestionsById(question.examId));
       return {};
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const deleteExamById = createAsyncThunk(
+  'exam/delete/id',
+  async (
+    { examId, callback }: { examId: number; callback: () => void },
+    { rejectWithValue }
+  ) => {
+    try {
+      const res = await axios.delete(`/Exam/Delete/Exam/BY/ID/${examId}`);
+      callback();
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const deleteQuestionById = createAsyncThunk(
+  'question/delete',
+  async (questionId: number, { rejectWithValue }) => {
+    try {
+      const res = await axios.delete(`/Exam/Delete/Exam/Question/BY/ID/${questionId}`);
+      return questionId;
     } catch (error: any) {
       return rejectWithValue(error.response.data);
     }

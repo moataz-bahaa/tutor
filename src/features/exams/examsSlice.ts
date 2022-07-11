@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import {
   fetchExamsByLevel,
   fetchExamsByMonth,
@@ -6,6 +6,8 @@ import {
   fetchExamQuestionsById,
   addExam,
   addQuestionToExam,
+  deleteExamById,
+  deleteQuestionById,
 } from './examsActions';
 
 export interface ExamInfo {
@@ -80,7 +82,7 @@ const exmasSlice = createSlice({
   name: 'exams',
   initialState,
   reducers: {
-    clearExamsState: () => initialState
+    clearExamsState: () => initialState,
   },
   extraReducers: (builder) => {
     // get exams by level
@@ -175,6 +177,41 @@ const exmasSlice = createSlice({
       .addCase(addQuestionToExam.rejected, (state, action) => {
         state.loading = false;
         state.error = <string>action.payload || 'خطا ف السيرقير';
+      });
+
+    // delete exam by id
+    builder
+      .addCase(deleteExamById.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteExamById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = '';
+      })
+      .addCase(deleteExamById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = <string>action.payload || 'خطا ف السيرقير';
+      });
+
+    // delete question by id
+    builder
+      .addCase(deleteQuestionById.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteQuestionById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = '';
+        alert('تمت عملية الحذف');
+        const question = state.curExam.questions.find(
+          (q) => q.QuestionID === action.payload
+        );
+        const index = state.curExam.questions.indexOf(question!);
+        state.curExam.questions.splice(index, 1);
+      })
+      .addCase(deleteQuestionById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = <string>action.payload || 'خطا ف السيرقير';
+        alert(state.error);
       });
   },
 });

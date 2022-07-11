@@ -29,6 +29,7 @@ export interface State {
 
 const Component: React.FC<ComponentProps> = (props) => {
   const [current, setCurrent] = useState<State>({ type: 'all', page: 1 });
+  const [deleteVideoId, setDeleteVideoId] = useState(0);
   const dispatch = useAppDispatch();
   useEffect(() => {
     if (current.type === 'all') {
@@ -82,7 +83,6 @@ const Component: React.FC<ComponentProps> = (props) => {
       };
     }
   );
-
   return (
     <div className='videos-dashboard'>
       <UploadVideo />
@@ -103,13 +103,15 @@ const Component: React.FC<ComponentProps> = (props) => {
                   </div>
                   <div className='rest'>
                     <FcVideoFile className='video-icon' />
-                    {lastAction === deleteVideoById.pending.type ? (
-                      <SpinnerForBtn className= 'delete-icon' />
+                    {lastAction === deleteVideoById.pending.type &&
+                    deleteVideoId === video.videoId ? (
+                      <SpinnerForBtn className='delete-icon' />
                     ) : (
                       <MdDelete
                         className='delete-icon'
                         onClick={() => {
                           dispatch(deleteVideoById(video.videoId));
+                          setDeleteVideoId(video.videoId);
                         }}
                       />
                     )}

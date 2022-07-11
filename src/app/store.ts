@@ -1,8 +1,9 @@
-import { configureStore, PayloadAction } from '@reduxjs/toolkit';
+import { configureStore, createReducer } from '@reduxjs/toolkit';
 import adminReducer from '../features/admin/adminSlice';
 import videosReducer from '../features/videos/videoSlice';
 import studentsReducer from '../features/students/students-slice';
 import examsReducer from '../features/exams/examsSlice';
+
 
 const store = configureStore({
   reducer: {
@@ -10,7 +11,7 @@ const store = configureStore({
     videos: videosReducer,
     students: studentsReducer,
     exams: examsReducer,
-    lastAction: (state = null, action) => {
+    lastAction: (state, action) => {
       return action.type;
     },
   },
