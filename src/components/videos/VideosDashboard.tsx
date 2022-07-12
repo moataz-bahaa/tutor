@@ -9,13 +9,14 @@ import {
   fetchVideosByWeek,
 } from '../../features/videos/videoActions';
 import { clearVideosState } from '../../features/videos/videoSlice';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Spinner from '../Spinner';
 import Alert from '../Alert';
 import { MdDelete } from 'react-icons/md';
 import Pagination from '../Pagination';
 import Filter from './Filter';
 import { SpinnerForBtn } from '../Spinner';
+import { Link } from 'react-router-dom';
 
 interface ComponentProps {}
 
@@ -31,6 +32,7 @@ const Component: React.FC<ComponentProps> = (props) => {
   const [current, setCurrent] = useState<State>({ type: 'all', page: 1 });
   const [deleteVideoId, setDeleteVideoId] = useState(0);
   const dispatch = useAppDispatch();
+
   useEffect(() => {
     if (current.type === 'all') {
       dispatch(fetchAllVideos({ pageNumber: current.page }));
@@ -83,6 +85,7 @@ const Component: React.FC<ComponentProps> = (props) => {
       };
     }
   );
+
   return (
     <div className='videos-dashboard'>
       <UploadVideo />
@@ -96,9 +99,12 @@ const Component: React.FC<ComponentProps> = (props) => {
           <div className='videos row g-2'>
             {videos.map((video) => {
               return (
-                <div className='col-12 col-md-6 video' key={video.videoId}>
-                  <div className='video-title'>
-                    <h2>{video.videoName}</h2>
+                <div
+                  className='col-12 col-md-6 video'
+                  key={video.videoId}
+                >
+                  <div className='video-info'>
+                    <Link to={`/video/${video.videoId}`} className='title'>{video.videoName}</Link>
                     <h3>{video.videoNumber}</h3>
                   </div>
                   <div className='rest'>

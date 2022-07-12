@@ -74,7 +74,7 @@ const studentSlice = createSlice({
         state.error = <string>action.payload || 'خطا ف السرقير';
       });
 
-    // get studetn by id
+    // get student by id
     builder
       .addCase(fetchStudentById.pending, (state) => {
         state.loading = true;

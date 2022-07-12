@@ -6,6 +6,7 @@ import {
   fetchVideosByMonth,
   fetchVideosByWeek,
   uploadVideo,
+  fetchVideoById
 } from './videoActions';
 
 export interface Video {
@@ -16,12 +17,12 @@ export interface Video {
 
 export interface VideoDetails {
   videoId: number;
-  videoName: string;
   levelName: string;
   monthText: string;
+  videoDate: string;
+  videoName: string;
   weekText: string;
   videoNumber: string;
-  videoDate: string;
   videoNotes: string;
   videoPath: string;
 }
@@ -33,6 +34,7 @@ interface InitialState {
     videoCount: number;
     videos: Video[];
   };
+  currentVideo: VideoDetails | null;
   error: string;
 }
 
@@ -43,6 +45,7 @@ const initialState: InitialState = {
     videoCount: 0,
     videos: [],
   },
+  currentVideo: null,
   error: '',
 };
 
@@ -53,6 +56,7 @@ const videosSlice = createSlice({
     clearVideosState: () => initialState,
   },
   extraReducers: (builder) => {
+
     //#region get all videos
     builder.addCase(fetchAllVideos.pending, (state) => {
       state.loading = true;
@@ -141,6 +145,21 @@ const videosSlice = createSlice({
       alert('تم حذف الفديو');
     });
     builder.addCase(deleteVideoById.rejected, (state, action) => {
+      state.loading = false;
+      state.error = <string>action.payload || 'خطا ف السيرفير';
+    });
+    //#endregion
+
+    //#region fetch video by id
+    builder.addCase(fetchVideoById.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(fetchVideoById.fulfilled, (state, action) => {
+      state.loading = false;
+      state.error = '';
+      state.currentVideo = action.payload;
+    });
+    builder.addCase(fetchVideoById.rejected, (state, action) => {
       state.loading = false;
       state.error = <string>action.payload || 'خطا ف السيرفير';
     });

@@ -14,11 +14,25 @@
     padding: 10px;
     border: 2px dashed $main-blue;
     margin-bottom: 10px;
+    transition: background-color 0.3s ease;
 
     &-icon {
       font-size: 50px;
     }
 
+    &-info {
+      .title {
+        font-size: 40px;
+        cursor: pointer;
+        // margin-bottom: 10px;
+
+        &:hover {
+          // text-decoration: underline;
+          // border-bottom: 4px solid $blue;
+          color: $main-blue;
+        }
+      }
+    }
     .delete-icon {
       font-size: 50px;
       cursor: pointer;

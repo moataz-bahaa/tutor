@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { Video } from './videoSlice';
+import { Video, VideoDetails } from './videoSlice';
 
 export const fetchAllVideos = createAsyncThunk(
   'videos/getAll',
@@ -135,11 +135,14 @@ export const deleteVideoById = createAsyncThunk(
   }
 );
 
-// const fetchVideoById = async (id: number, { rejectWithValue }) => {
-//   try {
-//     const res = await axios.get(`/Videos/Select/Video/BY/ID/${id}`);
-//     return {};
-//   } catch (error: any) {
-//     rejectWithValue(error.response.data);
-//   }
-// };
+export const fetchVideoById = createAsyncThunk(
+  'video/id',
+  async (videoId: number, { rejectWithValue }) => {
+    try {
+      const res = await axios.get<VideoDetails>(`/Videos/Select/Video/BY/ID/${videoId}`);
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);

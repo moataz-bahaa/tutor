@@ -28,7 +28,7 @@ export const fetchAllStudents = createAsyncThunk(
 
 export const fetchStudentById = createAsyncThunk(
   'student/id',
-  async (id: number, { rejectWithValue }: any) => {
+  async (id: number, { rejectWithValue }) => {
     try {
       const res = await axios.get<Student>(`/Student/Select/Student/BY/ID/${id}`);
       return res.data;

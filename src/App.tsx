@@ -10,6 +10,7 @@ import Exam from './pages/ExamDetails';
 import PrivateRoute from '././components/PrivateRoute';
 import RecordVideo from './pages/RecordVideo';
 import ExamQuestions from './pages/ExamQuestions';
+import Video from './pages/Video';
 
 function App() {
   return (
@@ -30,6 +31,14 @@ function App() {
           element={
             <PrivateRoute>
               <Dashboard />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path='/video/:id'
+          element={
+            <PrivateRoute>
+              <Video />
             </PrivateRoute>
           }
         />
