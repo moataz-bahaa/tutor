@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import {
+  fetchAllExams,
   fetchExamsByLevel,
   fetchExamsByMonth,
   fetchExamDetailsById,
@@ -85,6 +86,22 @@ const exmasSlice = createSlice({
     clearExamsState: () => initialState,
   },
   extraReducers: (builder) => {
+    // fetch all exams
+    builder
+      .addCase(fetchAllExams.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(fetchAllExams.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = '';
+        state.data = action.payload;
+      })
+      .addCase(fetchAllExams.rejected, (state, action) => {
+        state.loading = false;
+        state.data = initialState.data;
+        state.error = <string>action.payload || 'خطا ف السيرقير';
+      });
+    
     // get exams by level
     builder
       .addCase(fetchExamsByLevel.pending, (state, action) => {

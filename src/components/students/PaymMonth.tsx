@@ -1,8 +1,7 @@
 import Modal from '../Modal';
 import { FcMoneyTransfer } from 'react-icons/fc';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { useState } from 'react';
+import { useMonths, useAppDispatch, useAppSelector } from '../../app/hooks';
 import { insertStudentPayment } from '../../features/students/students-actions';
 import { CgSpinnerTwo } from 'react-icons/cg';
 import Alert from '../Alert';
@@ -15,7 +14,6 @@ interface PayMonthProps {
 
 const PayMonth: React.FC<PayMonthProps> = ({ studentId }) => {
   const [showModal, setShowModal] = useState(false);
-  const [months, setMonths] = useState<{ monthId: number; monthText: string }[]>([]);
   const [payMonth, setPayMonth] = useState(0);
   const dispatch = useAppDispatch();
   const { loading, error } = useAppSelector((state) => {
@@ -24,18 +22,7 @@ const PayMonth: React.FC<PayMonthProps> = ({ studentId }) => {
       error: state.students.error,
     };
   });
-
-  useEffect(() => {
-    const fetchMonths = async () => {
-      try {
-        const res = await axios.get('/Dates/Select/Months');
-        setMonths(res.data);
-      } catch (error: any) {
-        console.log(error.response.data);
-      }
-    };
-    fetchMonths();
-  }, []);
+  const months = useMonths();
 
   return (
     <>
@@ -50,7 +37,7 @@ const PayMonth: React.FC<PayMonthProps> = ({ studentId }) => {
         header='دفع شهر'
         footerButton={{
           text: loading ? Spinner : 'دفع',
-          onClick: async() => {
+          onClick: async () => {
             if (payMonth === 0) {
               return alert('اختر شهر اولا');
             }

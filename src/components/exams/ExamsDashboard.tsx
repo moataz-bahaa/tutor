@@ -5,26 +5,32 @@ import Spinner from '../Spinner';
 import { useNavigate } from 'react-router-dom';
 import Pagination from '../Pagination';
 import { useState, useEffect } from 'react';
-import { fetchExamsByLevel, fetchExamsByMonth } from '../../features/exams/examsActions';
+import {
+  fetchExamsByLevel,
+  fetchExamsByMonth,
+  fetchAllExams,
+} from '../../features/exams/examsActions';
 import { clearExamsState } from '../../features/exams/examsSlice';
 import AddExam from './AddExam';
 
 interface ExamsDashboardProps {}
 
 export interface State {
-  type: null | 'level' | 'level-month';
+  type: 'all' | 'level' | 'level-month';
   page: number;
   level?: number;
   month?: number;
 }
 
 const ExamsDashboard: React.FC<ExamsDashboardProps> = (props) => {
-  const [current, setCurrent] = useState<State>({ type: null, page: 1 });
+  const [current, setCurrent] = useState<State>({ type: 'all', page: 1 });
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (current.type === 'level') {
+    if (current.type === 'all') {
+      dispatch(fetchAllExams({ pageNumber: current.page }));
+    } else if (current.type === 'level') {
       dispatch(fetchExamsByLevel({ level: current.level!, pageNumber: current.page }));
     } else if (current.type === 'level-month') {
       dispatch(
@@ -49,7 +55,8 @@ const ExamsDashboard: React.FC<ExamsDashboardProps> = (props) => {
       loading:
         state.exams.loading &&
         (lastAction === fetchExamsByLevel.pending.type ||
-          lastAction == fetchExamsByMonth.pending.type),
+          lastAction === fetchExamsByMonth.pending.type ||
+          lastAction === fetchAllExams.pending.type),
     };
   });
 

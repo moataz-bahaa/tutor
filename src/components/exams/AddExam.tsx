@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Modal from '../Modal';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { useAppDispatch, useAppSelector, useMonths } from '../../app/hooks';
 import { addExam } from '../../features/exams/examsActions';
 import { useNavigate } from 'react-router-dom';
 import { SpinnerForBtn } from '../Spinner';
@@ -17,9 +17,16 @@ interface Exam {
 
 const AddExam: React.FC<AddExamProps> = ({}) => {
   const [showModal, setShowModal] = useState(false);
-  const [exam, setExam] = useState({} as Exam);
+  const [exam, setExam] = useState<Exam>({
+    examLevel: 0,
+    examMonth: 0,
+    examName: '',
+    examNumber: '',
+    examTimeLine: '',
+  });
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const months = useMonths();
   const { loading } = useAppSelector((state) => {
     return {
       loading: state.exams.loading,
@@ -38,6 +45,9 @@ const AddExam: React.FC<AddExamProps> = ({}) => {
 
   const handleAddExam = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (exam.examMonth === 0 || exam.examLevel === 0) {
+      return alert('املا جميع البيانات اولا');
+    }
     dispatch(
       addExam({
         exam,
@@ -64,6 +74,7 @@ const AddExam: React.FC<AddExamProps> = ({}) => {
       >
         <form id='add-exam-form' onSubmit={handleAddExam}>
           <input
+            required
             onChange={handleChange}
             className='form-control mb-1'
             type='text'
@@ -71,36 +82,54 @@ const AddExam: React.FC<AddExamProps> = ({}) => {
             placeholder='اسم الامتحان'
           />
           <input
+            required
             onChange={handleChange}
-            className='form-control mb-2'
+            className='form-control mb-1'
             type='text'
             name='examNumber'
             placeholder='رقم الامتحان'
           />
-          <input
-            onChange={handleChange}
+          <select
             className='form-control mb-1'
-            type='number'
-            name='examMonth'
-            min='1'
-            max='12'
-            placeholder='امتحان شهر'
-          />
+            value={exam.examMonth}
+            onChange={(e) => {
+              setExam((prev) => ({
+                ...prev,
+                examMonth: +e.target.value,
+              }));
+            }}
+          >
+            <option value='0'>اختر شهر</option>
+            {months.map((m) => (
+              <option key={m.monthId} value={m.monthId}>
+                {m.monthText}
+              </option>
+            ))}
+          </select>
           <input
+            required
             onChange={handleChange}
             className='form-control mb-1'
             type='time'
             name='examTimeLine'
           />
-          <input
-            onChange={handleChange}
+          <select
             className='form-control mb-1'
-            type='number'
-            name='examLevel'
-            min='1'
-            max='3'
-            placeholder='امتحان الصف'
-          />
+            value={exam.examLevel}
+            onChange={(e) => {
+              setExam((prev) => ({
+                ...prev,
+                examLevel: +e.target.value,
+              }));
+            }}
+          >
+            <option value='0' hidden>
+              اختر الصف
+            </option>
+            <option value='1'>الصف الاول</option>
+            <option value='2'>الصف الثانى</option>
+            <option value='3'>الصف الثالث</option>
+          </select>
         </form>
       </Modal>
     </div>

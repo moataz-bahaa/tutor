@@ -34,14 +34,23 @@ const FilterExams: React.FC<FilterExamsProps> = ({ current, setCurrent }) => {
       <select
         className='col-12 col-md-6 form-control'
         onChange={(e) => {
-          setCurrent({
-            type: 'level',
-            level: +e.target.value,
-            page: 1,
-          });
+          if (e.target.value === 'all') {
+            setCurrent({
+              type: 'all',
+              page: 1
+            });
+          }
+          else {
+            setCurrent({
+              type: 'level',
+              level: +e.target.value,
+              page: 1,
+            });
+          }
         }}
       >
-        <option hidden>اختر الصف</option>
+        <option hidden value='0'>اختر الصف</option>
+        <option value='all'>الكل</option>
         <option value='1'>الصف الاول</option>
         <option value='2'>الصف الثانى</option>
         <option value='3'>الصف الثالث</option>

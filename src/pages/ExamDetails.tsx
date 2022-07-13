@@ -36,7 +36,7 @@ const Exam: React.FC<AddExamProps> = (props) => {
 
   if (error || !details) {
     return (
-      <div className='container pt-5'>
+      <div className='container pt-10'>
         <Alert message={error} variant='danger' />
       </div>
     );

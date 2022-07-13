@@ -3,6 +3,31 @@ import axios from 'axios';
 import { ExamInfo, ExamDetails, ExamWithQuestions } from './examsSlice';
 import { State as Question } from '../../components/exams/AddQuestion';
 
+export const fetchAllExams = createAsyncThunk(
+  'exams/all',
+  async (
+    {
+      pageNumber = 1,
+      count = 3,
+    }: { pageNumber?: number; count?: number },
+    { rejectWithValue }
+  ) => {
+    try {
+      const res = await axios.get<{
+        item1: { examsCount: number; pageCount: number };
+        item2: ExamInfo[];
+      }>(`/Exam/Select/All/Exams/${pageNumber}/${count}/`);
+      return {
+        exams: res.data.item2,
+        examsCount: res.data.item1.examsCount,
+        pageCount: res.data.item1.pageCount,
+      };
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const fetchExamsByLevel = createAsyncThunk(
   'exams/level',
   async (
